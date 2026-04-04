@@ -1,0 +1,418 @@
+============================================================
+=== Sub-classifier Layer 1 (Input Dimensions: 13) ===
+============================================================
+
+--------------------------------------------------
+Linguistic Explanations of Rule #1:
+IF-part: DeltaRelPower is high (a=0.7263, sigma=0.1900) AND
+         ThetaRelPower is low (a=0.2596, sigma=0.1573) AND
+         AlphaRelPower is very low (a=0.1173, sigma=0.1742) AND
+         BetaRelPower is very low (a=0.1035, sigma=0.1107) AND
+         ThetaAlphaRatio is low (a=0.2811, sigma=0.1585) AND
+         SEF95 is medium (a=0.4085, sigma=0.1568) AND
+         SpectralEntropy is medium (a=0.5242, sigma=0.1452) AND
+         RMS is low (a=0.2758, sigma=0.1211) AND
+         STD is low (a=0.2758, sigma=0.1211) AND
+         HjorthActivity is very low (a=0.1136, sigma=0.0920) AND
+         HjorthMobility is low (a=0.2681, sigma=0.1510) AND
+         HjorthComplexity is low (a=0.2513, sigma=0.1151) AND
+         WaveformLength is very low (a=0.1659, sigma=0.1162)
+THEN-part: Output indicates Class 2 with consequence weight P=0.6125
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #2:
+IF-part: DeltaRelPower is very low (a=0.0853, sigma=0.2316) AND
+         ThetaRelPower is very low (a=0.1413, sigma=0.1214) AND
+         AlphaRelPower is very high (a=0.8804, sigma=0.3100) AND
+         BetaRelPower is very low (a=0.1233, sigma=0.1082) AND
+         ThetaAlphaRatio is very low (a=0.0163, sigma=0.1192) AND
+         SEF95 is medium (a=0.4523, sigma=0.1462) AND
+         SpectralEntropy is medium (a=0.4055, sigma=0.1656) AND
+         RMS is medium (a=0.4293, sigma=0.1392) AND
+         STD is medium (a=0.4293, sigma=0.1392) AND
+         HjorthActivity is low (a=0.2262, sigma=0.1052) AND
+         HjorthMobility is medium (a=0.5903, sigma=0.1240) AND
+         HjorthComplexity is very low (a=0.0157, sigma=0.1016) AND
+         WaveformLength is high (a=0.6765, sigma=0.2608)
+THEN-part: Output indicates Class 0 with consequence weight P=1.4088
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #3:
+IF-part: DeltaRelPower is low (a=0.3865, sigma=0.1616) AND
+         ThetaRelPower is medium (a=0.4441, sigma=0.1686) AND
+         AlphaRelPower is low (a=0.2271, sigma=0.1755) AND
+         BetaRelPower is medium (a=0.4933, sigma=0.2026) AND
+         ThetaAlphaRatio is low (a=0.2311, sigma=0.1213) AND
+         SEF95 is high (a=0.7824, sigma=0.1689) AND
+         SpectralEntropy is very high (a=0.8671, sigma=0.1619) AND
+         RMS is very low (a=0.0785, sigma=0.1287) AND
+         STD is very low (a=0.0785, sigma=0.1287) AND
+         HjorthActivity is very low (a=0.0202, sigma=0.0807) AND
+         HjorthMobility is high (a=0.6449, sigma=0.1588) AND
+         HjorthComplexity is very low (a=0.1031, sigma=0.0772) AND
+         WaveformLength is very low (a=0.1181, sigma=0.1250)
+THEN-part: Output indicates Class 2 with consequence weight P=0.8118
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #4:
+IF-part: DeltaRelPower is medium (a=0.5254, sigma=0.1508) AND
+         ThetaRelPower is low (a=0.3673, sigma=0.1437) AND
+         AlphaRelPower is very low (a=0.1601, sigma=0.1679) AND
+         BetaRelPower is low (a=0.3988, sigma=0.1590) AND
+         ThetaAlphaRatio is low (a=0.2629, sigma=0.1203) AND
+         SEF95 is high (a=0.7422, sigma=0.1574) AND
+         SpectralEntropy is high (a=0.7959, sigma=0.1375) AND
+         RMS is very low (a=0.0948, sigma=0.1204) AND
+         STD is very low (a=0.0948, sigma=0.1204) AND
+         HjorthActivity is very low (a=0.0246, sigma=0.0777) AND
+         HjorthMobility is medium (a=0.5596, sigma=0.1354) AND
+         HjorthComplexity is very low (a=0.1390, sigma=0.0743) AND
+         WaveformLength is very low (a=0.1123, sigma=0.1148)
+THEN-part: Output indicates Class 2 with consequence weight P=0.9507
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #5:
+IF-part: DeltaRelPower is medium (a=0.5791, sigma=0.1720) AND
+         ThetaRelPower is medium (a=0.4984, sigma=0.2145) AND
+         AlphaRelPower is very low (a=0.1863, sigma=0.1748) AND
+         BetaRelPower is very low (a=0.1268, sigma=0.1241) AND
+         ThetaAlphaRatio is low (a=0.3194, sigma=0.1644) AND
+         SEF95 is medium (a=0.4387, sigma=0.1594) AND
+         SpectralEntropy is high (a=0.6651, sigma=0.1351) AND
+         RMS is low (a=0.2039, sigma=0.1232) AND
+         STD is low (a=0.2039, sigma=0.1232) AND
+         HjorthActivity is very low (a=0.0727, sigma=0.0883) AND
+         HjorthMobility is low (a=0.3394, sigma=0.1445) AND
+         HjorthComplexity is very low (a=0.1661, sigma=0.0969) AND
+         WaveformLength is very low (a=0.1474, sigma=0.1203)
+THEN-part: Output indicates Class 2 with consequence weight P=1.3812
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #6:
+IF-part: DeltaRelPower is very high (a=0.8591, sigma=0.2290) AND
+         ThetaRelPower is very low (a=0.1773, sigma=0.1507) AND
+         AlphaRelPower is very low (a=0.0431, sigma=0.1846) AND
+         BetaRelPower is very low (a=0.0243, sigma=0.1197) AND
+         ThetaAlphaRatio is medium (a=0.4948, sigma=0.2241) AND
+         SEF95 is very low (a=0.1966, sigma=0.2252) AND
+         SpectralEntropy is low (a=0.3471, sigma=0.1860) AND
+         RMS is medium (a=0.4782, sigma=0.1729) AND
+         STD is medium (a=0.4783, sigma=0.1729) AND
+         HjorthActivity is low (a=0.2763, sigma=0.1424) AND
+         HjorthMobility is very low (a=0.1047, sigma=0.2007) AND
+         HjorthComplexity is medium (a=0.4035, sigma=0.1716) AND
+         WaveformLength is very low (a=0.1623, sigma=0.1232)
+THEN-part: Output indicates Class 2 with consequence weight P=0.9218
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #7:
+IF-part: DeltaRelPower is high (a=0.7823, sigma=0.1911) AND
+         ThetaRelPower is low (a=0.2529, sigma=0.1479) AND
+         AlphaRelPower is very low (a=0.0815, sigma=0.1659) AND
+         BetaRelPower is very low (a=0.0629, sigma=0.1080) AND
+         ThetaAlphaRatio is low (a=0.3707, sigma=0.1731) AND
+         SEF95 is low (a=0.3400, sigma=0.1617) AND
+         SpectralEntropy is medium (a=0.4643, sigma=0.1466) AND
+         RMS is low (a=0.3396, sigma=0.1227) AND
+         STD is low (a=0.3396, sigma=0.1227) AND
+         HjorthActivity is very low (a=0.1560, sigma=0.0947) AND
+         HjorthMobility is very low (a=0.1991, sigma=0.1583) AND
+         HjorthComplexity is low (a=0.2907, sigma=0.1207) AND
+         WaveformLength is very low (a=0.1672, sigma=0.1105)
+THEN-part: Output indicates Class 2 with consequence weight P=1.0198
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #8:
+IF-part: DeltaRelPower is very low (a=0.1295, sigma=0.2103) AND
+         ThetaRelPower is very low (a=0.1463, sigma=0.1363) AND
+         AlphaRelPower is very high (a=0.8032, sigma=0.2797) AND
+         BetaRelPower is very low (a=0.1595, sigma=0.1121) AND
+         ThetaAlphaRatio is very low (a=0.0200, sigma=0.1148) AND
+         SEF95 is medium (a=0.5365, sigma=0.1394) AND
+         SpectralEntropy is medium (a=0.5684, sigma=0.1210) AND
+         RMS is low (a=0.2434, sigma=0.1070) AND
+         STD is low (a=0.2434, sigma=0.1070) AND
+         HjorthActivity is very low (a=0.0916, sigma=0.0785) AND
+         HjorthMobility is medium (a=0.5917, sigma=0.1244) AND
+         HjorthComplexity is very low (a=0.0341, sigma=0.0889) AND
+         WaveformLength is low (a=0.3568, sigma=0.1457)
+THEN-part: Output indicates Class 0 with consequence weight P=1.3213
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #9:
+IF-part: DeltaRelPower is low (a=0.2096, sigma=0.2076) AND
+         ThetaRelPower is very low (a=0.1735, sigma=0.1544) AND
+         AlphaRelPower is high (a=0.6439, sigma=0.2576) AND
+         BetaRelPower is low (a=0.2617, sigma=0.1377) AND
+         ThetaAlphaRatio is very low (a=0.0337, sigma=0.1287) AND
+         SEF95 is high (a=0.6805, sigma=0.1645) AND
+         SpectralEntropy is high (a=0.6904, sigma=0.1320) AND
+         RMS is very low (a=0.1845, sigma=0.1220) AND
+         STD is very low (a=0.1845, sigma=0.1220) AND
+         HjorthActivity is very low (a=0.0631, sigma=0.0852) AND
+         HjorthMobility is high (a=0.6323, sigma=0.1540) AND
+         HjorthComplexity is very low (a=0.0612, sigma=0.0890) AND
+         WaveformLength is low (a=0.2796, sigma=0.1445)
+THEN-part: Output indicates Class 0 with consequence weight P=1.7077
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #10:
+IF-part: DeltaRelPower is medium (a=0.5263, sigma=0.1936) AND
+         ThetaRelPower is low (a=0.2916, sigma=0.1749) AND
+         AlphaRelPower is low (a=0.2877, sigma=0.2086) AND
+         BetaRelPower is very low (a=0.1806, sigma=0.1326) AND
+         ThetaAlphaRatio is very low (a=0.1462, sigma=0.1566) AND
+         SEF95 is medium (a=0.5346, sigma=0.1628) AND
+         SpectralEntropy is high (a=0.6561, sigma=0.1439) AND
+         RMS is low (a=0.2378, sigma=0.1330) AND
+         STD is low (a=0.2378, sigma=0.1330) AND
+         HjorthActivity is very low (a=0.0951, sigma=0.0962) AND
+         HjorthMobility is medium (a=0.4235, sigma=0.1508) AND
+         HjorthComplexity is very low (a=0.1512, sigma=0.1043) AND
+         WaveformLength is low (a=0.2158, sigma=0.1377)
+THEN-part: Output indicates Class 1 with consequence weight P=0.9568
+--------------------------------------------------
+
+============================================================
+=== Sub-classifier Layer 2 (Input Dimensions: 18) ===
+============================================================
+
+--------------------------------------------------
+Linguistic Explanations of Rule #1:
+IF-part: DeltaRelPower is medium (a=0.5254, sigma=0.1508) AND
+         ThetaRelPower is low (a=0.3673, sigma=0.1437) AND
+         AlphaRelPower is very low (a=0.1601, sigma=0.1679) AND
+         BetaRelPower is low (a=0.3988, sigma=0.1590) AND
+         ThetaAlphaRatio is low (a=0.2629, sigma=0.1203) AND
+         SEF95 is high (a=0.7422, sigma=0.1574) AND
+         SpectralEntropy is high (a=0.7959, sigma=0.1375) AND
+         RMS is very low (a=0.0948, sigma=0.1204) AND
+         STD is very low (a=0.0948, sigma=0.1204) AND
+         HjorthActivity is very low (a=0.0246, sigma=0.0777) AND
+         HjorthMobility is medium (a=0.5596, sigma=0.1354) AND
+         HjorthComplexity is very low (a=0.1390, sigma=0.0743) AND
+         WaveformLength is very low (a=0.1123, sigma=0.1148) AND
+         PrevLayerEvidence_W is IGNORED (Inherited padded feature) AND
+         PrevLayerEvidence_N1 is IGNORED (Inherited padded feature) AND
+         PrevLayerEvidence_N2 is IGNORED (Inherited padded feature) AND
+         PrevLayerEvidence_N3 is IGNORED (Inherited padded feature) AND
+         PrevLayerEvidence_R is IGNORED (Inherited padded feature)
+THEN-part: Output indicates Class 2 with consequence weight P=0.0000
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #2:
+IF-part: DeltaRelPower is low (a=0.3865, sigma=0.1616) AND
+         ThetaRelPower is medium (a=0.4441, sigma=0.1686) AND
+         AlphaRelPower is low (a=0.2271, sigma=0.1755) AND
+         BetaRelPower is medium (a=0.4933, sigma=0.2026) AND
+         ThetaAlphaRatio is low (a=0.2311, sigma=0.1213) AND
+         SEF95 is high (a=0.7824, sigma=0.1689) AND
+         SpectralEntropy is very high (a=0.8671, sigma=0.1619) AND
+         RMS is very low (a=0.0785, sigma=0.1287) AND
+         STD is very low (a=0.0785, sigma=0.1287) AND
+         HjorthActivity is very low (a=0.0202, sigma=0.0807) AND
+         HjorthMobility is high (a=0.6449, sigma=0.1588) AND
+         HjorthComplexity is very low (a=0.1031, sigma=0.0772) AND
+         WaveformLength is very low (a=0.1181, sigma=0.1250) AND
+         PrevLayerEvidence_W is IGNORED (Inherited padded feature) AND
+         PrevLayerEvidence_N1 is IGNORED (Inherited padded feature) AND
+         PrevLayerEvidence_N2 is IGNORED (Inherited padded feature) AND
+         PrevLayerEvidence_N3 is IGNORED (Inherited padded feature) AND
+         PrevLayerEvidence_R is IGNORED (Inherited padded feature)
+THEN-part: Output indicates Class 0 with consequence weight P=0.0000
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #3:
+IF-part: DeltaRelPower is low (a=0.3083, sigma=0.4946) AND
+         ThetaRelPower is very low (a=0.0732, sigma=0.2712) AND
+         AlphaRelPower is low (a=0.3135, sigma=0.2761) AND
+         BetaRelPower is high (a=0.6514, sigma=0.3013) AND
+         ThetaAlphaRatio is low (a=0.3702, sigma=0.2882) AND
+         SEF95 is medium (a=0.5239, sigma=0.3308) AND
+         SpectralEntropy is very low (a=0.0632, sigma=0.3555) AND
+         RMS is low (a=0.2466, sigma=0.1753) AND
+         STD is medium (a=0.4932, sigma=0.1620) AND
+         HjorthActivity is high (a=0.6150, sigma=0.3688) AND
+         HjorthMobility is high (a=0.6637, sigma=0.4311) AND
+         HjorthComplexity is very low (a=0.1940, sigma=0.4358) AND
+         WaveformLength is very low (a=0.1256, sigma=0.3185) AND
+         PrevLayerEvidence_W is strongly supporting (a=0.0854, sigma=0.0579) AND
+         PrevLayerEvidence_N1 is supporting (a=0.0275, sigma=0.0335) AND
+         PrevLayerEvidence_N2 is near neutral (a=0.0026, sigma=0.0631) AND
+         PrevLayerEvidence_N3 is near neutral (a=0.0249, sigma=0.0295) AND
+         PrevLayerEvidence_R is near neutral (a=0.0175, sigma=0.0037)
+THEN-part: Output indicates Class 2 with consequence weight P=0.3162
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #4:
+IF-part: DeltaRelPower is very high (a=0.8425, sigma=0.1020) AND
+         ThetaRelPower is very low (a=0.0506, sigma=0.2709) AND
+         AlphaRelPower is very high (a=0.8548, sigma=0.4187) AND
+         BetaRelPower is very high (a=0.8861, sigma=0.3751) AND
+         ThetaAlphaRatio is low (a=0.3730, sigma=0.2431) AND
+         SEF95 is high (a=0.6480, sigma=0.1241) AND
+         SpectralEntropy is very high (a=0.9139, sigma=0.1401) AND
+         RMS is medium (a=0.4220, sigma=0.3283) AND
+         STD is very low (a=0.0860, sigma=0.4008) AND
+         HjorthActivity is high (a=0.6321, sigma=0.3861) AND
+         HjorthMobility is high (a=0.7292, sigma=0.4499) AND
+         HjorthComplexity is low (a=0.3713, sigma=0.2441) AND
+         WaveformLength is low (a=0.2989, sigma=0.1915) AND
+         PrevLayerEvidence_W is strongly supporting (a=0.1414, sigma=0.0457) AND
+         PrevLayerEvidence_N1 is near neutral (a=0.0147, sigma=0.0269) AND
+         PrevLayerEvidence_N2 is near neutral (a=0.0219, sigma=0.0183) AND
+         PrevLayerEvidence_N3 is supporting (a=0.0504, sigma=0.0319) AND
+         PrevLayerEvidence_R is near neutral (a=0.0101, sigma=0.0055)
+THEN-part: Output indicates Class 2 with consequence weight P=0.0052
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #5:
+IF-part: DeltaRelPower is very low (a=0.0635, sigma=0.2932) AND
+         ThetaRelPower is low (a=0.3914, sigma=0.4205) AND
+         AlphaRelPower is very low (a=0.1525, sigma=0.4684) AND
+         BetaRelPower is very low (a=0.1806, sigma=0.1417) AND
+         ThetaAlphaRatio is very low (a=0.1862, sigma=0.1351) AND
+         SEF95 is very low (a=0.1267, sigma=0.2291) AND
+         SpectralEntropy is high (a=0.7826, sigma=0.4626) AND
+         RMS is very low (a=0.1221, sigma=0.1173) AND
+         STD is very high (a=0.9507, sigma=0.2495) AND
+         HjorthActivity is very high (a=0.9242, sigma=0.4730) AND
+         HjorthMobility is medium (a=0.5428, sigma=0.4440) AND
+         HjorthComplexity is very high (a=0.8513, sigma=0.3979) AND
+         WaveformLength is low (a=0.3524, sigma=0.2198) AND
+         PrevLayerEvidence_W is near neutral (a=0.0213, sigma=0.0259) AND
+         PrevLayerEvidence_N1 is strongly supporting (a=0.0674, sigma=0.0373) AND
+         PrevLayerEvidence_N2 is supporting (a=0.0545, sigma=0.0161) AND
+         PrevLayerEvidence_N3 is near neutral (a=0.0088, sigma=0.0193) AND
+         PrevLayerEvidence_R is slightly suppressing (a=-0.0005, sigma=0.0093)
+THEN-part: Output indicates Class 1 with consequence weight P=0.0657
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #6:
+IF-part: DeltaRelPower is medium (a=0.4497, sigma=0.1035) AND
+         ThetaRelPower is very low (a=0.1012, sigma=0.1552) AND
+         AlphaRelPower is low (a=0.2257, sigma=0.4945) AND
+         BetaRelPower is low (a=0.3326, sigma=0.3875) AND
+         ThetaAlphaRatio is low (a=0.3561, sigma=0.3229) AND
+         SEF95 is very low (a=0.0902, sigma=0.3205) AND
+         SpectralEntropy is low (a=0.2112, sigma=0.3570) AND
+         RMS is medium (a=0.4882, sigma=0.4332) AND
+         STD is high (a=0.7516, sigma=0.4918) AND
+         HjorthActivity is very high (a=0.8262, sigma=0.2436) AND
+         HjorthMobility is low (a=0.2503, sigma=0.2497) AND
+         HjorthComplexity is very high (a=0.9215, sigma=0.2825) AND
+         WaveformLength is very high (a=0.9178, sigma=0.2036) AND
+         PrevLayerEvidence_W is strongly supporting (a=0.0994, sigma=0.0482) AND
+         PrevLayerEvidence_N1 is near neutral (a=0.0106, sigma=0.0081) AND
+         PrevLayerEvidence_N2 is strongly supporting (a=0.0822, sigma=0.0134) AND
+         PrevLayerEvidence_N3 is near neutral (a=0.0130, sigma=0.0194) AND
+         PrevLayerEvidence_R is near neutral (a=0.0110, sigma=0.0101)
+THEN-part: Output indicates Class 1 with consequence weight P=0.0000
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #7:
+IF-part: DeltaRelPower is very high (a=0.8521, sigma=0.2753) AND
+         ThetaRelPower is very low (a=0.1860, sigma=0.2871) AND
+         AlphaRelPower is very low (a=0.1153, sigma=0.3849) AND
+         BetaRelPower is very high (a=0.8754, sigma=0.4807) AND
+         ThetaAlphaRatio is very high (a=0.8575, sigma=0.4832) AND
+         SEF95 is very low (a=0.0114, sigma=0.4284) AND
+         SpectralEntropy is high (a=0.7675, sigma=0.4558) AND
+         RMS is very high (a=0.9325, sigma=0.3114) AND
+         STD is very high (a=0.8978, sigma=0.3379) AND
+         HjorthActivity is very low (a=0.1703, sigma=0.3298) AND
+         HjorthMobility is very low (a=0.0145, sigma=0.1615) AND
+         HjorthComplexity is very low (a=0.1846, sigma=0.3122) AND
+         WaveformLength is very high (a=0.8123, sigma=0.4833) AND
+         PrevLayerEvidence_W is strongly supporting (a=0.1271, sigma=0.0716) AND
+         PrevLayerEvidence_N1 is supporting (a=0.0553, sigma=0.0179) AND
+         PrevLayerEvidence_N2 is strongly supporting (a=0.0763, sigma=0.0208) AND
+         PrevLayerEvidence_N3 is supporting (a=0.0593, sigma=0.0238) AND
+         PrevLayerEvidence_R is near neutral (a=0.0120, sigma=0.0022)
+THEN-part: Output indicates Class 3 with consequence weight P=-0.0000
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #8:
+IF-part: DeltaRelPower is low (a=0.3068, sigma=0.3117) AND
+         ThetaRelPower is very low (a=0.0068, sigma=0.4024) AND
+         AlphaRelPower is low (a=0.2675, sigma=0.2241) AND
+         BetaRelPower is very low (a=0.1210, sigma=0.4473) AND
+         ThetaAlphaRatio is very low (a=0.1237, sigma=0.3450) AND
+         SEF95 is high (a=0.6260, sigma=0.1639) AND
+         SpectralEntropy is high (a=0.6242, sigma=0.4144) AND
+         RMS is low (a=0.3373, sigma=0.3368) AND
+         STD is high (a=0.7544, sigma=0.1323) AND
+         HjorthActivity is high (a=0.6033, sigma=0.2440) AND
+         HjorthMobility is high (a=0.6185, sigma=0.1758) AND
+         HjorthComplexity is low (a=0.2950, sigma=0.1028) AND
+         WaveformLength is very low (a=0.0991, sigma=0.2259) AND
+         PrevLayerEvidence_W is strongly supporting (a=0.1364, sigma=0.0774) AND
+         PrevLayerEvidence_N1 is supporting (a=0.0351, sigma=0.0076) AND
+         PrevLayerEvidence_N2 is near neutral (a=0.0142, sigma=0.0607) AND
+         PrevLayerEvidence_N3 is near neutral (a=0.0240, sigma=0.0256) AND
+         PrevLayerEvidence_R is near neutral (a=0.0155, sigma=0.0024)
+THEN-part: Output indicates Class 2 with consequence weight P=0.0002
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #9:
+IF-part: DeltaRelPower is medium (a=0.4182, sigma=0.1311) AND
+         ThetaRelPower is high (a=0.6849, sigma=0.2964) AND
+         AlphaRelPower is very high (a=0.9707, sigma=0.3543) AND
+         BetaRelPower is medium (a=0.5136, sigma=0.3210) AND
+         ThetaAlphaRatio is high (a=0.7799, sigma=0.2548) AND
+         SEF95 is high (a=0.6820, sigma=0.1535) AND
+         SpectralEntropy is low (a=0.3259, sigma=0.3134) AND
+         RMS is high (a=0.7378, sigma=0.2994) AND
+         STD is medium (a=0.4082, sigma=0.4821) AND
+         HjorthActivity is very high (a=0.8809, sigma=0.1555) AND
+         HjorthMobility is very high (a=0.8939, sigma=0.1770) AND
+         HjorthComplexity is very low (a=0.1438, sigma=0.1422) AND
+         WaveformLength is low (a=0.3922, sigma=0.2623) AND
+         PrevLayerEvidence_W is supporting (a=0.0565, sigma=0.0621) AND
+         PrevLayerEvidence_N1 is supporting (a=0.0577, sigma=0.0137) AND
+         PrevLayerEvidence_N2 is supporting (a=0.0324, sigma=0.0551) AND
+         PrevLayerEvidence_N3 is supporting (a=0.0375, sigma=0.0163) AND
+         PrevLayerEvidence_R is near neutral (a=0.0143, sigma=0.0041)
+THEN-part: Output indicates Class 2 with consequence weight P=0.0000
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #10:
+IF-part: DeltaRelPower is high (a=0.6974, sigma=0.1658) AND
+         ThetaRelPower is low (a=0.2447, sigma=0.2788) AND
+         AlphaRelPower is high (a=0.7074, sigma=0.2389) AND
+         BetaRelPower is very low (a=0.1037, sigma=0.2058) AND
+         ThetaAlphaRatio is medium (a=0.5025, sigma=0.3738) AND
+         SEF95 is medium (a=0.5050, sigma=0.4188) AND
+         SpectralEntropy is low (a=0.3344, sigma=0.4005) AND
+         RMS is low (a=0.2326, sigma=0.1273) AND
+         STD is very high (a=0.8921, sigma=0.3940) AND
+         HjorthActivity is medium (a=0.4658, sigma=0.4977) AND
+         HjorthMobility is high (a=0.6468, sigma=0.2752) AND
+         HjorthComplexity is very high (a=0.9045, sigma=0.4898) AND
+         WaveformLength is very low (a=0.1897, sigma=0.1604) AND
+         PrevLayerEvidence_W is supporting (a=0.0536, sigma=0.0285) AND
+         PrevLayerEvidence_N1 is near neutral (a=0.0163, sigma=0.0372) AND
+         PrevLayerEvidence_N2 is supporting (a=0.0462, sigma=0.0631) AND
+         PrevLayerEvidence_N3 is supporting (a=0.0293, sigma=0.0172) AND
+         PrevLayerEvidence_R is near neutral (a=0.0120, sigma=0.0071)
+THEN-part: Output indicates Class 0 with consequence weight P=0.5166
+--------------------------------------------------
+

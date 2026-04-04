@@ -1,0 +1,158 @@
+=== EAtt-TSK-FC dp_layers Comparison ===
+Base Config: {'class_mode': 'five_class', 'n_features': 10, 'n_rules': 10, 'heritage_ratio': 0.25, 'num_classes': 5, 'random_seed': 20260324, 'inheritance_mode': 'elite', 'fusion_mode': 'entropy_attention', 'class_balanced': False, 'class_weight_power': 0.5, 'class_weight_min': 0.5, 'class_weight_max': 2.0, 'use_projection': False, 'short_rule_ratio': 0.1, 'drop_feature_ratio': 0.2, 'alpha': 0.1, 'temperature': 1.0, 'epsilon': 1e-12}
+
+[Data-1]
+  dp_layers=2
+    Overall Accuracy:    47.63%
+    Mean Class Accuracy: 79.05%
+    Mean Sensitivity:    21.96%
+    Mean Specificity:    81.20%
+    Macro F1:            18.54%
+    Confusion Matrix:
+[[ 31   0  79   0   0]
+ [  8   0  25   0   0]
+ [ 45   0 200   0   0]
+ [  0   0  44   0   0]
+ [ 26   0  27   0   0]]
+  dp_layers=3
+    Overall Accuracy:    47.22%
+    Mean Class Accuracy: 78.89%
+    Mean Sensitivity:    21.40%
+    Mean Specificity:    80.98%
+    Macro F1:            17.95%
+    Confusion Matrix:
+[[ 27   0  83   0   0]
+ [  8   0  25   0   0]
+ [ 43   0 202   0   0]
+ [  0   0  44   0   0]
+ [ 26   0  27   0   0]]
+  dp_layers=4
+    Overall Accuracy:    47.63%
+    Mean Class Accuracy: 79.05%
+    Mean Sensitivity:    22.14%
+    Mean Specificity:    81.17%
+    Macro F1:            19.16%
+    Confusion Matrix:
+[[ 29   0  81   0   0]
+ [  8   0  25   0   0]
+ [ 44   0 201   0   0]
+ [  0   0  43   1   0]
+ [ 26   0  27   0   0]]
+--------------------------------------------------
+
+[Data-2]
+  dp_layers=2
+    Overall Accuracy:    39.10%
+    Mean Class Accuracy: 75.64%
+    Mean Sensitivity:    21.70%
+    Mean Specificity:    80.97%
+    Macro F1:            15.09%
+    Confusion Matrix:
+[[285   0  16   0   0]
+ [ 89   0  12   0   0]
+ [337   0  54   0   0]
+ [ 20   0  27   0   0]
+ [ 26   0   1   0   0]]
+  dp_layers=3
+    Overall Accuracy:    49.25%
+    Mean Class Accuracy: 79.70%
+    Mean Sensitivity:    24.53%
+    Mean Specificity:    82.87%
+    Macro F1:            21.78%
+    Confusion Matrix:
+[[176   0 125   0   0]
+ [ 44   0  57   0   0]
+ [140   0 251   0   0]
+ [  0   0  47   0   0]
+ [ 19   0   8   0   0]]
+  dp_layers=4
+    Overall Accuracy:    48.79%
+    Mean Class Accuracy: 79.52%
+    Mean Sensitivity:    24.25%
+    Mean Specificity:    82.69%
+    Macro F1:            21.54%
+    Confusion Matrix:
+[[171   0 130   0   0]
+ [ 44   0  57   0   0]
+ [139   0 252   0   0]
+ [  0   0  47   0   0]
+ [ 19   0   8   0   0]]
+--------------------------------------------------
+
+[Data-3]
+  dp_layers=2
+    Overall Accuracy:    32.13%
+    Mean Class Accuracy: 72.85%
+    Mean Sensitivity:    22.57%
+    Mean Specificity:    81.05%
+    Macro F1:            15.69%
+    Confusion Matrix:
+[[ 0 78 20  0  0]
+ [ 0 68 16  0  0]
+ [ 0 64 30  0  0]
+ [ 0  3 14  0  0]
+ [ 0 11  1  0  0]]
+  dp_layers=3
+    Overall Accuracy:    35.08%
+    Mean Class Accuracy: 74.03%
+    Mean Sensitivity:    23.83%
+    Mean Specificity:    81.52%
+    Macro F1:            17.68%
+    Confusion Matrix:
+[[ 0 32 66  0  0]
+ [ 0 42 42  0  0]
+ [ 0 29 65  0  0]
+ [ 0  0 17  0  0]
+ [ 0  5  7  0  0]]
+  dp_layers=4
+    Overall Accuracy:    35.41%
+    Mean Class Accuracy: 74.16%
+    Mean Sensitivity:    23.98%
+    Mean Specificity:    81.59%
+    Macro F1:            18.14%
+    Confusion Matrix:
+[[ 1 32 65  0  0]
+ [ 0 40 44  0  0]
+ [ 1 26 67  0  0]
+ [ 2  0 15  0  0]
+ [ 0  4  8  0  0]]
+--------------------------------------------------
+
+[Data-4]
+  dp_layers=2
+    Overall Accuracy:    42.95%
+    Mean Class Accuracy: 77.18%
+    Mean Sensitivity:    28.00%
+    Mean Specificity:    83.39%
+    Macro F1:            26.98%
+    Confusion Matrix:
+[[77 70  9  0  0]
+ [61 79  7  0  0]
+ [11 66 45  0  0]
+ [ 1  0 24  0  0]
+ [11  7  0  0  0]]
+  dp_layers=3
+    Overall Accuracy:    47.01%
+    Mean Class Accuracy: 78.80%
+    Mean Sensitivity:    31.47%
+    Mean Specificity:    84.71%
+    Macro F1:            29.77%
+    Confusion Matrix:
+[[78 54 24  0  0]
+ [62 65 20  0  0]
+ [11 34 77  0  0]
+ [ 0  0 25  0  0]
+ [11  7  0  0  0]]
+  dp_layers=4
+    Overall Accuracy:    46.37%
+    Mean Class Accuracy: 78.55%
+    Mean Sensitivity:    31.06%
+    Mean Specificity:    84.53%
+    Macro F1:            29.39%
+    Confusion Matrix:
+[[78 53 24  1  0]
+ [65 62 20  0  0]
+ [12 33 77  0  0]
+ [ 0  0 25  0  0]
+ [11  7  0  0  0]]
+--------------------------------------------------

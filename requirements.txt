@@ -1,0 +1,19 @@
+# 核心底层与矩阵计算支持
+numpy==2.2.6
+scipy==1.15.3
+
+# 机器学习模型构建与聚类算法 (KPCA, Ridge Regression)
+scikit-learn==1.7.2
+joblib==1.5.3
+
+# MIT-BIH PhysioBank 生理指标数据库读取
+wfdb==4.3.1
+
+# 脑电波分析库 (如需其它格式扩充)
+mne==1.11.0
+
+# 信号降噪（DB6 小波变换）
+PyWavelets==1.8.0
+
+# 模糊逻辑与模糊聚类 (FCM)
+scikit-fuzzy==0.5.0

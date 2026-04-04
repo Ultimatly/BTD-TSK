@@ -1,0 +1,418 @@
+============================================================
+=== Sub-classifier Layer 1 (Input Dimensions: 13) ===
+============================================================
+
+--------------------------------------------------
+Linguistic Explanations of Rule #1:
+IF-part: Feature_0 is more serious (a=0.7694, sigma=0.1785) AND
+         Feature_1 is not serious (a=0.1714, sigma=0.1490) AND
+         Feature_2 is not serious (a=0.1158, sigma=0.1186) AND
+         Feature_3 is not serious (a=0.0669, sigma=0.0917) AND
+         Feature_4 is not serious (a=0.1729, sigma=0.1416) AND
+         Feature_5 is little serious (a=0.3694, sigma=0.1530) AND
+         Feature_6 is medium serious (a=0.4388, sigma=0.1507) AND
+         Feature_7 is not serious (a=0.1442, sigma=0.0776) AND
+         Feature_8 is not serious (a=0.1442, sigma=0.0776) AND
+         Feature_9 is not serious (a=0.0307, sigma=0.0334) AND
+         Feature_10 is little serious (a=0.2017, sigma=0.1252) AND
+         Feature_11 is little serious (a=0.2981, sigma=0.1146) AND
+         Feature_12 is little serious (a=0.2052, sigma=0.1065)
+THEN-part: Output indicates Class 2 with consequence weight P=2.0047
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #2:
+IF-part: Feature_0 is more serious (a=0.6060, sigma=0.1610) AND
+         Feature_1 is little serious (a=0.2290, sigma=0.1480) AND
+         Feature_2 is not serious (a=0.1549, sigma=0.1314) AND
+         Feature_3 is not serious (a=0.1817, sigma=0.1072) AND
+         Feature_4 is not serious (a=0.1660, sigma=0.1218) AND
+         Feature_5 is medium serious (a=0.5793, sigma=0.1595) AND
+         Feature_6 is medium serious (a=0.5946, sigma=0.1398) AND
+         Feature_7 is not serious (a=0.0532, sigma=0.0610) AND
+         Feature_8 is not serious (a=0.0532, sigma=0.0610) AND
+         Feature_9 is not serious (a=0.0069, sigma=0.0261) AND
+         Feature_10 is little serious (a=0.3548, sigma=0.1271) AND
+         Feature_11 is little serious (a=0.2004, sigma=0.0917) AND
+         Feature_12 is not serious (a=0.1047, sigma=0.1052)
+THEN-part: Output indicates Class 2 with consequence weight P=1.3266
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #3:
+IF-part: Feature_0 is medium serious (a=0.4953, sigma=0.1608) AND
+         Feature_1 is more serious (a=0.6240, sigma=0.2397) AND
+         Feature_2 is not serious (a=0.1676, sigma=0.1212) AND
+         Feature_3 is not serious (a=0.0553, sigma=0.0963) AND
+         Feature_4 is medium serious (a=0.4258, sigma=0.1807) AND
+         Feature_5 is little serious (a=0.3526, sigma=0.1411) AND
+         Feature_6 is more serious (a=0.6311, sigma=0.1143) AND
+         Feature_7 is not serious (a=0.0697, sigma=0.0510) AND
+         Feature_8 is not serious (a=0.0697, sigma=0.0510) AND
+         Feature_9 is not serious (a=0.0088, sigma=0.0263) AND
+         Feature_10 is little serious (a=0.2519, sigma=0.1115) AND
+         Feature_11 is not serious (a=0.1551, sigma=0.0834) AND
+         Feature_12 is not serious (a=0.1196, sigma=0.0779)
+THEN-part: Output indicates Class 2 with consequence weight P=0.4793
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #4:
+IF-part: Feature_0 is little serious (a=0.3071, sigma=0.1805) AND
+         Feature_1 is little serious (a=0.2489, sigma=0.1415) AND
+         Feature_2 is little serious (a=0.3405, sigma=0.1627) AND
+         Feature_3 is medium serious (a=0.4086, sigma=0.1733) AND
+         Feature_4 is not serious (a=0.0726, sigma=0.1128) AND
+         Feature_5 is more serious (a=0.7909, sigma=0.1875) AND
+         Feature_6 is especially serious (a=0.8278, sigma=0.1626) AND
+         Feature_7 is not serious (a=0.0329, sigma=0.0564) AND
+         Feature_8 is not serious (a=0.0329, sigma=0.0564) AND
+         Feature_9 is not serious (a=0.0037, sigma=0.0249) AND
+         Feature_10 is more serious (a=0.6189, sigma=0.1826) AND
+         Feature_11 is not serious (a=0.0889, sigma=0.0838) AND
+         Feature_12 is not serious (a=0.1351, sigma=0.1248)
+THEN-part: Output indicates Class 0 with consequence weight P=1.7789
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #5:
+IF-part: Feature_0 is especially serious (a=0.8998, sigma=0.1916) AND
+         Feature_1 is not serious (a=0.0703, sigma=0.1431) AND
+         Feature_2 is not serious (a=0.0460, sigma=0.1102) AND
+         Feature_3 is not serious (a=0.0172, sigma=0.0846) AND
+         Feature_4 is not serious (a=0.1552, sigma=0.1301) AND
+         Feature_5 is little serious (a=0.2134, sigma=0.1641) AND
+         Feature_6 is little serious (a=0.2179, sigma=0.1945) AND
+         Feature_7 is little serious (a=0.2920, sigma=0.1224) AND
+         Feature_8 is little serious (a=0.2920, sigma=0.1224) AND
+         Feature_9 is not serious (a=0.0991, sigma=0.0575) AND
+         Feature_10 is not serious (a=0.0717, sigma=0.1403) AND
+         Feature_11 is medium serious (a=0.5106, sigma=0.1791) AND
+         Feature_12 is little serious (a=0.2736, sigma=0.1020)
+THEN-part: Output indicates Class 3 with consequence weight P=1.4405
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #6:
+IF-part: Feature_0 is little serious (a=0.2209, sigma=0.1877) AND
+         Feature_1 is little serious (a=0.3172, sigma=0.1259) AND
+         Feature_2 is medium serious (a=0.5875, sigma=0.2272) AND
+         Feature_3 is little serious (a=0.2804, sigma=0.1201) AND
+         Feature_4 is not serious (a=0.0440, sigma=0.1085) AND
+         Feature_5 is more serious (a=0.6729, sigma=0.1412) AND
+         Feature_6 is especially serious (a=0.8005, sigma=0.1386) AND
+         Feature_7 is not serious (a=0.0732, sigma=0.0444) AND
+         Feature_8 is not serious (a=0.0732, sigma=0.0444) AND
+         Feature_9 is not serious (a=0.0092, sigma=0.0229) AND
+         Feature_10 is medium serious (a=0.5391, sigma=0.1355) AND
+         Feature_11 is not serious (a=0.0690, sigma=0.0812) AND
+         Feature_12 is little serious (a=0.2578, sigma=0.1135)
+THEN-part: Output indicates Class 0 with consequence weight P=1.1853
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #7:
+IF-part: Feature_0 is medium serious (a=0.4964, sigma=0.1659) AND
+         Feature_1 is little serious (a=0.3071, sigma=0.1505) AND
+         Feature_2 is little serious (a=0.2822, sigma=0.1552) AND
+         Feature_3 is not serious (a=0.1992, sigma=0.1162) AND
+         Feature_4 is not serious (a=0.1233, sigma=0.1258) AND
+         Feature_5 is medium serious (a=0.5778, sigma=0.1554) AND
+         Feature_6 is more serious (a=0.6994, sigma=0.1440) AND
+         Feature_7 is not serious (a=0.0780, sigma=0.0566) AND
+         Feature_8 is not serious (a=0.0780, sigma=0.0566) AND
+         Feature_9 is not serious (a=0.0113, sigma=0.0260) AND
+         Feature_10 is little serious (a=0.3986, sigma=0.1322) AND
+         Feature_11 is not serious (a=0.1384, sigma=0.0890) AND
+         Feature_12 is not serious (a=0.1868, sigma=0.1096)
+THEN-part: Output indicates Class 2 with consequence weight P=0.6006
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #8:
+IF-part: Feature_0 is especially serious (a=0.8178, sigma=0.1790) AND
+         Feature_1 is little serious (a=0.2157, sigma=0.1470) AND
+         Feature_2 is not serious (a=0.0488, sigma=0.1198) AND
+         Feature_3 is not serious (a=0.0157, sigma=0.0928) AND
+         Feature_4 is medium serious (a=0.4479, sigma=0.2072) AND
+         Feature_5 is little serious (a=0.2185, sigma=0.1782) AND
+         Feature_6 is little serious (a=0.3647, sigma=0.1604) AND
+         Feature_7 is not serious (a=0.1506, sigma=0.0719) AND
+         Feature_8 is not serious (a=0.1506, sigma=0.0719) AND
+         Feature_9 is not serious (a=0.0310, sigma=0.0330) AND
+         Feature_10 is not serious (a=0.0952, sigma=0.1454) AND
+         Feature_11 is little serious (a=0.3146, sigma=0.1151) AND
+         Feature_12 is not serious (a=0.1424, sigma=0.0846)
+THEN-part: Output indicates Class 3 with consequence weight P=1.0103
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #9:
+IF-part: Feature_0 is more serious (a=0.6652, sigma=0.1429) AND
+         Feature_1 is medium serious (a=0.4250, sigma=0.1594) AND
+         Feature_2 is not serious (a=0.1267, sigma=0.1040) AND
+         Feature_3 is not serious (a=0.0413, sigma=0.0869) AND
+         Feature_4 is little serious (a=0.3701, sigma=0.1504) AND
+         Feature_5 is little serious (a=0.3281, sigma=0.1343) AND
+         Feature_6 is medium serious (a=0.5695, sigma=0.1120) AND
+         Feature_7 is not serious (a=0.0853, sigma=0.0500) AND
+         Feature_8 is not serious (a=0.0853, sigma=0.0500) AND
+         Feature_9 is not serious (a=0.0119, sigma=0.0242) AND
+         Feature_10 is little serious (a=0.2007, sigma=0.1087) AND
+         Feature_11 is not serious (a=0.1915, sigma=0.0829) AND
+         Feature_12 is not serious (a=0.1231, sigma=0.0732)
+THEN-part: Output indicates Class 2 with consequence weight P=0.9035
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #10:
+IF-part: Feature_0 is medium serious (a=0.4774, sigma=0.1390) AND
+         Feature_1 is little serious (a=0.3087, sigma=0.1273) AND
+         Feature_2 is not serious (a=0.1974, sigma=0.1249) AND
+         Feature_3 is little serious (a=0.2832, sigma=0.1160) AND
+         Feature_4 is not serious (a=0.1717, sigma=0.1016) AND
+         Feature_5 is more serious (a=0.6848, sigma=0.1495) AND
+         Feature_6 is more serious (a=0.7360, sigma=0.1287) AND
+         Feature_7 is not serious (a=0.0262, sigma=0.0535) AND
+         Feature_8 is not serious (a=0.0262, sigma=0.0535) AND
+         Feature_9 is not serious (a=0.0026, sigma=0.0219) AND
+         Feature_10 is medium serious (a=0.4673, sigma=0.1234) AND
+         Feature_11 is not serious (a=0.1341, sigma=0.0731) AND
+         Feature_12 is not serious (a=0.0699, sigma=0.1051)
+THEN-part: Output indicates Class 2 with consequence weight P=0.6713
+--------------------------------------------------
+
+============================================================
+=== Sub-classifier Layer 2 (Input Dimensions: 18) ===
+============================================================
+
+--------------------------------------------------
+Linguistic Explanations of Rule #1:
+IF-part: Feature_0 is more serious (a=0.6652, sigma=0.1429) AND
+         Feature_1 is medium serious (a=0.4250, sigma=0.1594) AND
+         Feature_2 is not serious (a=0.1267, sigma=0.1040) AND
+         Feature_3 is not serious (a=0.0413, sigma=0.0869) AND
+         Feature_4 is little serious (a=0.3701, sigma=0.1504) AND
+         Feature_5 is little serious (a=0.3281, sigma=0.1343) AND
+         Feature_6 is medium serious (a=0.5695, sigma=0.1120) AND
+         Feature_7 is not serious (a=0.0853, sigma=0.0500) AND
+         Feature_8 is not serious (a=0.0853, sigma=0.0500) AND
+         Feature_9 is not serious (a=0.0119, sigma=0.0242) AND
+         Feature_10 is little serious (a=0.2007, sigma=0.1087) AND
+         Feature_11 is not serious (a=0.1915, sigma=0.0829) AND
+         Feature_12 is not serious (a=0.1231, sigma=0.0732) AND
+         Feature_13 is IGNORED (Inherited padded feature) AND
+         Feature_14 is IGNORED (Inherited padded feature) AND
+         Feature_15 is IGNORED (Inherited padded feature) AND
+         Feature_16 is IGNORED (Inherited padded feature) AND
+         Feature_17 is IGNORED (Inherited padded feature)
+THEN-part: Output indicates Class 4 with consequence weight P=-0.0003
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #2:
+IF-part: Feature_0 is medium serious (a=0.4774, sigma=0.1390) AND
+         Feature_1 is little serious (a=0.3087, sigma=0.1273) AND
+         Feature_2 is not serious (a=0.1974, sigma=0.1249) AND
+         Feature_3 is little serious (a=0.2832, sigma=0.1160) AND
+         Feature_4 is not serious (a=0.1717, sigma=0.1016) AND
+         Feature_5 is more serious (a=0.6848, sigma=0.1495) AND
+         Feature_6 is more serious (a=0.7360, sigma=0.1287) AND
+         Feature_7 is not serious (a=0.0262, sigma=0.0535) AND
+         Feature_8 is not serious (a=0.0262, sigma=0.0535) AND
+         Feature_9 is not serious (a=0.0026, sigma=0.0219) AND
+         Feature_10 is medium serious (a=0.4673, sigma=0.1234) AND
+         Feature_11 is not serious (a=0.1341, sigma=0.0731) AND
+         Feature_12 is not serious (a=0.0699, sigma=0.1051) AND
+         Feature_13 is IGNORED (Inherited padded feature) AND
+         Feature_14 is IGNORED (Inherited padded feature) AND
+         Feature_15 is IGNORED (Inherited padded feature) AND
+         Feature_16 is IGNORED (Inherited padded feature) AND
+         Feature_17 is IGNORED (Inherited padded feature)
+THEN-part: Output indicates Class 2 with consequence weight P=0.0000
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #3:
+IF-part: Feature_0 is little serious (a=0.3197, sigma=0.3968) AND
+         Feature_1 is little serious (a=0.2006, sigma=0.2579) AND
+         Feature_2 is medium serious (a=0.5033, sigma=0.0953) AND
+         Feature_3 is not serious (a=0.1793, sigma=0.2440) AND
+         Feature_4 is not serious (a=0.1686, sigma=0.2793) AND
+         Feature_5 is especially serious (a=0.9097, sigma=0.1780) AND
+         Feature_6 is little serious (a=0.2102, sigma=0.4898) AND
+         Feature_7 is IGNORED (Inherited padded feature) AND
+         Feature_8 is more serious (a=0.7276, sigma=0.3921) AND
+         Feature_9 is medium serious (a=0.4533, sigma=0.2110) AND
+         Feature_10 is little serious (a=0.2727, sigma=0.2774) AND
+         Feature_11 is especially serious (a=0.9142, sigma=0.3319) AND
+         Feature_12 is little serious (a=0.3061, sigma=0.4554) AND
+         Feature_13 is not serious (a=0.1298, sigma=0.0652) AND
+         Feature_14 is IGNORED (Inherited padded feature) AND
+         Feature_15 is not serious (a=0.0501, sigma=0.0585) AND
+         Feature_16 is not serious (a=0.1319, sigma=0.0156) AND
+         Feature_17 is IGNORED (Inherited padded feature)
+THEN-part: Output indicates Class 1 with consequence weight P=0.0000
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #4:
+IF-part: Feature_0 is more serious (a=0.7058, sigma=0.3109) AND
+         Feature_1 is medium serious (a=0.4147, sigma=0.2872) AND
+         Feature_2 is IGNORED (Inherited padded feature) AND
+         Feature_3 is not serious (a=0.1051, sigma=0.2920) AND
+         Feature_4 is IGNORED (Inherited padded feature) AND
+         Feature_5 is not serious (a=0.0347, sigma=0.1233) AND
+         Feature_6 is especially serious (a=0.9959, sigma=0.3590) AND
+         Feature_7 is not serious (a=0.0112, sigma=0.3554) AND
+         Feature_8 is not serious (a=0.1130, sigma=0.1335) AND
+         Feature_9 is not serious (a=0.1997, sigma=0.0789) AND
+         Feature_10 is not serious (a=0.0327, sigma=0.3571) AND
+         Feature_11 is medium serious (a=0.4795, sigma=0.4488) AND
+         Feature_12 is IGNORED (Inherited padded feature) AND
+         Feature_13 is not serious (a=0.0175, sigma=0.0282) AND
+         Feature_14 is not serious (a=0.0055, sigma=0.0042) AND
+         Feature_15 is not serious (a=0.0625, sigma=0.0344) AND
+         Feature_16 is not serious (a=0.0383, sigma=0.0427) AND
+         Feature_17 is not serious (a=0.0214, sigma=0.0182)
+THEN-part: Output indicates Class 2 with consequence weight P=8.0245
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #5:
+IF-part: Feature_0 is especially serious (a=0.8851, sigma=0.2376) AND
+         Feature_1 is medium serious (a=0.4449, sigma=0.3379) AND
+         Feature_2 is medium serious (a=0.4431, sigma=0.1487) AND
+         Feature_3 is little serious (a=0.3234, sigma=0.1788) AND
+         Feature_4 is medium serious (a=0.5620, sigma=0.2209) AND
+         Feature_5 is little serious (a=0.2342, sigma=0.2925) AND
+         Feature_6 is little serious (a=0.2884, sigma=0.4104) AND
+         Feature_7 is little serious (a=0.3493, sigma=0.3902) AND
+         Feature_8 is little serious (a=0.2581, sigma=0.3568) AND
+         Feature_9 is little serious (a=0.3372, sigma=0.1076) AND
+         Feature_10 is especially serious (a=0.8327, sigma=0.3348) AND
+         Feature_11 is not serious (a=0.1851, sigma=0.2358) AND
+         Feature_12 is more serious (a=0.7505, sigma=0.4334) AND
+         Feature_13 is not serious (a=0.1040, sigma=0.0167) AND
+         Feature_14 is not serious (a=0.0319, sigma=0.0176) AND
+         Feature_15 is not serious (a=0.0757, sigma=0.0182) AND
+         Feature_16 is not serious (a=0.0014, sigma=0.0499) AND
+         Feature_17 is not serious (a=0.0100, sigma=0.0181)
+THEN-part: Output indicates Class 4 with consequence weight P=0.0000
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #6:
+IF-part: Feature_0 is little serious (a=0.2938, sigma=0.4460) AND
+         Feature_1 is medium serious (a=0.4313, sigma=0.2274) AND
+         Feature_2 is little serious (a=0.3799, sigma=0.1223) AND
+         Feature_3 is medium serious (a=0.5985, sigma=0.2160) AND
+         Feature_4 is especially serious (a=0.9816, sigma=0.3711) AND
+         Feature_5 is not serious (a=0.1458, sigma=0.3877) AND
+         Feature_6 is especially serious (a=0.9276, sigma=0.1164) AND
+         Feature_7 is little serious (a=0.3645, sigma=0.1544) AND
+         Feature_8 is little serious (a=0.3958, sigma=0.1980) AND
+         Feature_9 is little serious (a=0.2510, sigma=0.2607) AND
+         Feature_10 is more serious (a=0.7677, sigma=0.4500) AND
+         Feature_11 is not serious (a=0.0809, sigma=0.3286) AND
+         Feature_12 is little serious (a=0.2027, sigma=0.3579) AND
+         Feature_13 is not serious (a=0.0551, sigma=0.0738) AND
+         Feature_14 is not serious (a=0.0178, sigma=0.0135) AND
+         Feature_15 is not serious (a=0.0598, sigma=0.0710) AND
+         Feature_16 is not serious (a=0.0297, sigma=0.0193) AND
+         Feature_17 is not serious (a=0.0200, sigma=0.0112)
+THEN-part: Output indicates Class 2 with consequence weight P=0.0769
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #7:
+IF-part: Feature_0 is especially serious (a=0.8774, sigma=0.1529) AND
+         Feature_1 is especially serious (a=0.9562, sigma=0.3525) AND
+         Feature_2 is medium serious (a=0.5748, sigma=0.2271) AND
+         Feature_3 is little serious (a=0.2149, sigma=0.3718) AND
+         Feature_4 is not serious (a=0.0113, sigma=0.3186) AND
+         Feature_5 is more serious (a=0.6251, sigma=0.3544) AND
+         Feature_6 is more serious (a=0.6551, sigma=0.2000) AND
+         Feature_7 is medium serious (a=0.5146, sigma=0.2033) AND
+         Feature_8 is medium serious (a=0.4031, sigma=0.2106) AND
+         Feature_9 is medium serious (a=0.4612, sigma=0.3122) AND
+         Feature_10 is medium serious (a=0.4265, sigma=0.1468) AND
+         Feature_11 is not serious (a=0.1568, sigma=0.2250) AND
+         Feature_12 is not serious (a=0.1767, sigma=0.4336) AND
+         Feature_13 is not serious (a=0.0014, sigma=0.0719) AND
+         Feature_14 is not serious (a=0.0035, sigma=0.0099) AND
+         Feature_15 is not serious (a=0.0436, sigma=0.0818) AND
+         Feature_16 is not serious (a=0.0623, sigma=0.0159) AND
+         Feature_17 is not serious (a=0.0303, sigma=0.0243)
+THEN-part: Output indicates Class 2 with consequence weight P=0.0118
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #8:
+IF-part: Feature_0 is little serious (a=0.2015, sigma=0.2313) AND
+         Feature_1 is especially serious (a=0.9405, sigma=0.2680) AND
+         Feature_2 is especially serious (a=0.8707, sigma=0.4003) AND
+         Feature_3 is little serious (a=0.3093, sigma=0.3184) AND
+         Feature_4 is not serious (a=0.1719, sigma=0.2680) AND
+         Feature_5 is little serious (a=0.3134, sigma=0.4982) AND
+         Feature_6 is medium serious (a=0.5766, sigma=0.1822) AND
+         Feature_7 is medium serious (a=0.4904, sigma=0.1568) AND
+         Feature_8 is not serious (a=0.1457, sigma=0.3400) AND
+         Feature_9 is not serious (a=0.1841, sigma=0.2209) AND
+         Feature_10 is little serious (a=0.3236, sigma=0.1797) AND
+         Feature_11 is more serious (a=0.7326, sigma=0.3265) AND
+         Feature_12 is not serious (a=0.1846, sigma=0.3888) AND
+         Feature_13 is not serious (a=0.0475, sigma=0.0370) AND
+         Feature_14 is not serious (a=0.0056, sigma=0.0080) AND
+         Feature_15 is not serious (a=0.1215, sigma=0.0223) AND
+         Feature_16 is not serious (a=0.0605, sigma=0.0585) AND
+         Feature_17 is not serious (a=0.0202, sigma=0.0277)
+THEN-part: Output indicates Class 3 with consequence weight P=-0.0001
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #9:
+IF-part: Feature_0 is little serious (a=0.2215, sigma=0.4208) AND
+         Feature_1 is medium serious (a=0.5824, sigma=0.2777) AND
+         Feature_2 is not serious (a=0.1729, sigma=0.1156) AND
+         Feature_3 is medium serious (a=0.5043, sigma=0.3336) AND
+         Feature_4 is especially serious (a=0.8809, sigma=0.2412) AND
+         Feature_5 is not serious (a=0.0694, sigma=0.2548) AND
+         Feature_6 is especially serious (a=0.8947, sigma=0.4655) AND
+         Feature_7 is more serious (a=0.7807, sigma=0.1804) AND
+         Feature_8 is medium serious (a=0.5013, sigma=0.1344) AND
+         Feature_9 is medium serious (a=0.5830, sigma=0.1639) AND
+         Feature_10 is not serious (a=0.0940, sigma=0.1814) AND
+         Feature_11 is more serious (a=0.7924, sigma=0.4576) AND
+         Feature_12 is especially serious (a=0.8592, sigma=0.1224) AND
+         Feature_13 is not serious (a=-0.0024, sigma=0.0719) AND
+         Feature_14 is not serious (a=0.0181, sigma=0.0125) AND
+         Feature_15 is not serious (a=0.0893, sigma=0.0351) AND
+         Feature_16 is not serious (a=0.0212, sigma=0.0507) AND
+         Feature_17 is not serious (a=0.0348, sigma=0.0127)
+THEN-part: Output indicates Class 0 with consequence weight P=0.0000
+--------------------------------------------------
+
+--------------------------------------------------
+Linguistic Explanations of Rule #10:
+IF-part: Feature_0 is not serious (a=0.0748, sigma=0.3157) AND
+         Feature_1 is more serious (a=0.7599, sigma=0.4362) AND
+         Feature_2 is medium serious (a=0.4307, sigma=0.3299) AND
+         Feature_3 is more serious (a=0.6809, sigma=0.3654) AND
+         Feature_4 is little serious (a=0.3387, sigma=0.1725) AND
+         Feature_5 is more serious (a=0.7100, sigma=0.3510) AND
+         Feature_6 is little serious (a=0.3192, sigma=0.1202) AND
+         Feature_7 is medium serious (a=0.4944, sigma=0.3040) AND
+         Feature_8 is not serious (a=0.1477, sigma=0.3494) AND
+         Feature_9 is little serious (a=0.3422, sigma=0.1909) AND
+         Feature_10 is more serious (a=0.6332, sigma=0.4180) AND
+         Feature_11 is more serious (a=0.6202, sigma=0.3846) AND
+         Feature_12 is especially serious (a=0.9262, sigma=0.4107) AND
+         Feature_13 is not serious (a=0.0211, sigma=0.0457) AND
+         Feature_14 is not serious (a=0.0293, sigma=0.0129) AND
+         Feature_15 is not serious (a=0.0973, sigma=0.0396) AND
+         Feature_16 is not serious (a=0.0782, sigma=0.0638) AND
+         Feature_17 is not serious (a=0.0522, sigma=0.0205)
+THEN-part: Output indicates Class 1 with consequence weight P=0.0008
+--------------------------------------------------
+

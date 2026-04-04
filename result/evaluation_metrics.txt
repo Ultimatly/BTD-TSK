@@ -1,0 +1,62 @@
+=== EAtt-TSK-FC Evaluation Metrics ===
+
+Results on Data-1 (Seed: 92011):
+  Model: EAtt-TSK-FC
+  Training Config: class_mode=five_class, feature_mode=handcrafted, n_features=10, dp_layers=2, n_rules=10, heritage_ratio=0.25, num_classes=5, class_balanced=False, class_weight_power=0.5, short_rule_ratio=0.1, drop_feature_ratio=0.2, alpha=0.1, temperature=1.0, use_projection=False
+  Overall Accuracy:    67.63%
+  Mean Class Accuracy: 87.05%
+  Mean Sensitivity:    48.78%
+  Mean Specificity:    88.13%
+  Macro F1:            44.77%
+  Confusion Matrix:
+[[ 67   0  40   3   0]
+ [  7   0  26   0   0]
+ [ 11   0 220  14   0]
+ [  0   0   3  41   0]
+ [  1   0  52   0   0]]
+----------------------------------------
+Results on Data-2 (Seed: 52169):
+  Model: EAtt-TSK-FC
+  Training Config: class_mode=five_class, feature_mode=handcrafted, n_features=10, dp_layers=2, n_rules=10, heritage_ratio=0.25, num_classes=5, class_balanced=False, class_weight_power=0.5, short_rule_ratio=0.1, drop_feature_ratio=0.2, alpha=0.1, temperature=1.0, use_projection=False
+  Overall Accuracy:    69.78%
+  Mean Class Accuracy: 87.91%
+  Mean Sensitivity:    36.72%
+  Mean Specificity:    89.84%
+  Macro F1:            35.50%
+  Confusion Matrix:
+[[224  20  57   0   0]
+ [ 25  16  60   0   0]
+ [ 15  11 365   0   0]
+ [  0   0  47   0   0]
+ [  6   3  18   0   0]]
+----------------------------------------
+Results on Data-3 (Seed: 34221):
+  Model: EAtt-TSK-FC
+  Training Config: class_mode=five_class, feature_mode=handcrafted, n_features=10, dp_layers=2, n_rules=10, heritage_ratio=0.25, num_classes=5, class_balanced=False, class_weight_power=0.5, short_rule_ratio=0.1, drop_feature_ratio=0.2, alpha=0.1, temperature=1.0, use_projection=False
+  Overall Accuracy:    55.08%
+  Mean Class Accuracy: 82.03%
+  Mean Sensitivity:    47.73%
+  Mean Specificity:    87.62%
+  Macro F1:            44.36%
+  Confusion Matrix:
+[[74 12  8  4  0]
+ [15 42 25  2  0]
+ [ 4 41 40  9  0]
+ [ 2  1  2 12  0]
+ [ 3  8  1  0  0]]
+----------------------------------------
+Results on Data-4 (Seed: 34001):
+  Model: EAtt-TSK-FC
+  Training Config: class_mode=five_class, feature_mode=handcrafted, n_features=10, dp_layers=2, n_rules=10, heritage_ratio=0.25, num_classes=5, class_balanced=False, class_weight_power=0.5, short_rule_ratio=0.1, drop_feature_ratio=0.2, alpha=0.1, temperature=1.0, use_projection=False
+  Overall Accuracy:    58.12%
+  Mean Class Accuracy: 83.25%
+  Mean Sensitivity:    54.26%
+  Mean Specificity:    88.33%
+  Macro F1:            53.59%
+  Confusion Matrix:
+[[ 73  71  12   0   0]
+ [ 21 106  10   0  10]
+ [  1  34  71  10   6]
+ [  0   0   7  18   0]
+ [  2  12   0   0   4]]
+----------------------------------------
