@@ -1,19 +1,29 @@
-# 核心底层与矩阵计算支持
+# BTD-TSK 当前项目依赖
+
+# 数值计算与科学计算
 numpy==2.2.6
 scipy==1.15.3
 
-# 机器学习模型构建与聚类算法 (KPCA, Ridge Regression)
+# 机器学习与模型持久化
 scikit-learn==1.7.2
 joblib==1.5.3
 
-# MIT-BIH PhysioBank 生理指标数据库读取
+# 深度学习教师模型
+torch==2.11.0+cpu
+
+# 模糊聚类与 TSK 前件初始化
+scikit-fuzzy==0.5.0
+
+# 信号读取与特征提取
 wfdb==4.3.1
-
-# 脑电波分析库 (如需其它格式扩充)
 mne==1.11.0
-
-# 信号降噪（DB6 小波变换）
 PyWavelets==1.8.0
 
-# 模糊逻辑与模糊聚类 (FCM)
-scikit-fuzzy==0.5.0
+# 结果可视化
+matplotlib==3.10.8
+
+# 后端服务
+fastapi==0.135.2
+uvicorn==0.42.0
+pydantic==2.12.5
+python-multipart==0.0.22
