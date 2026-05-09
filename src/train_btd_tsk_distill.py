@@ -8,7 +8,7 @@ from sklearn.metrics import confusion_matrix, f1_score
 
 from btd_teacher import BiLSTMSequenceClassifier, build_sequence_windows
 from btd_tsk import BTDTSKDistiller, ZeroOrderTSKGDClassifier
-from data_processor import build_dataset_bundle, get_multimodal_feature_names_cn
+from data_processor import build_dataset_bundle, get_multisource_feature_names_cn
 from tsk_classifier import ZeroOrderTSKClassifier
 
 NUM_CLASSES = 5
@@ -117,7 +117,7 @@ def _feature_level_text(value, mean, std):
 
 
 def export_student_rules_chinese(student_model, X_reference, save_path):
-    feature_names = get_multimodal_feature_names_cn()
+    feature_names = get_multisource_feature_names_cn()
     feature_mean = np.mean(X_reference, axis=0)
     feature_std = np.std(X_reference, axis=0) + 1e-12
     rule_activation = student_model.compute_rule_activations(X_reference)

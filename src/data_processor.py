@@ -15,7 +15,7 @@ ECG_HRV_FEATURE_DIM = ECG_HRV_FEATURE_DIM_BASE
 MULTIMODAL_ENGINEERED_FEATURE_DIM = EEG_ENGINEERED_FEATURE_DIM + ECG_HRV_FEATURE_DIM_BASE
 MULTIMODAL_ENGINEERED_OPT_FEATURE_DIM = EEG_ENGINEERED_FEATURE_DIM + ECG_HRV_FEATURE_DIM_OPT
 ENGINEERED_FEATURE_DIM = EEG_ENGINEERED_FEATURE_DIM
-DEFAULT_FEATURE_MODE = 'multimodal_engineered_opt'
+DEFAULT_FEATURE_MODE = 'multisource_engineered_opt'
 MULTIMODAL_ENGINEERED_OPT_FEATURE_NAMES_CN = [
     'EEG相对δ波功率',
     'EEG相对θ波功率',
@@ -42,7 +42,7 @@ MULTIMODAL_ENGINEERED_OPT_FEATURE_NAMES_CN = [
 ]
 
 
-def get_multimodal_feature_names_cn():
+def get_multisource_feature_names_cn():
     return list(MULTIMODAL_ENGINEERED_OPT_FEATURE_NAMES_CN)
 
 
@@ -386,7 +386,7 @@ def build_dataset_bundle(data_dir, record_names, test_size=0.25, random_state=42
 
     print(f'正在加载记录: {record_names}')
     print('类别模式: 固定五分类')
-    print(f'特征模式: 固定多模态工程化优化特征（{DEFAULT_FEATURE_MODE}）')
+    print(f'特征模式: 固定多源数据工程化优化特征（{DEFAULT_FEATURE_MODE}）')
     for rec in record_names:
         print(f'正在处理 {rec}...')
         try:
@@ -406,7 +406,7 @@ def build_dataset_bundle(data_dir, record_names, test_size=0.25, random_state=42
     X_all = np.concatenate(X_all, axis=0)
     y_all = np.concatenate(y_all, axis=0)
 
-    print(f'优化后多模态工程化特征数据形状: {X_all.shape}')
+    print(f'优化后多源数据工程化特征数据形状: {X_all.shape}')
 
     indices = np.arange(len(y_all))
     train_idx, test_idx = train_test_split(indices, test_size=test_size, random_state=random_state)

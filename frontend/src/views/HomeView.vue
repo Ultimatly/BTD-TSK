@@ -10,10 +10,10 @@
             <span class="brand-desc">轻量可解释诊断工作台</span>
           </div>
           <div class="hero-title-wrap">
-            <h1>多模态睡眠障碍病症轻量化辅助诊断系统</h1>
+            <h1>多源数据睡眠障碍病症轻量化辅助诊断系统</h1>
             <span class="title-glow"></span>
           </div>
-          <p>支持多模态睡眠诊断、规则解释、模型管理与历史结果回看。</p>
+          <p>支持多源数据睡眠诊断、规则解释、模型管理与历史结果回看。</p>
           <div class="hero-actions">
             <RouterLink to="/analysis" class="hero-button primary">开始诊断</RouterLink>
             <RouterLink to="/rules" class="hero-button secondary">查看规则中心</RouterLink>

@@ -166,7 +166,24 @@ def get_home_overview() -> list[dict[str, Any]]:
         patient_count = fetch_one(conn, 'SELECT COUNT(*) AS c FROM patients')['c']
         model_count = fetch_one(conn, 'SELECT COUNT(*) AS c FROM models')['c']
         history_count = fetch_one(conn, 'SELECT COUNT(*) AS c FROM diagnosis_runs')['c']
-        high_risk_count = fetch_one(conn, "SELECT COUNT(*) AS c FROM patients WHERE current_risk = '高风险'")['c']
+        high_risk_count = fetch_one(
+            conn,
+            """
+            SELECT COUNT(*) AS c
+            FROM (
+                SELECT r1.patient_id, r1.risk_level
+                FROM diagnosis_runs r1
+                JOIN (
+                    SELECT patient_id, MAX(created_at) AS max_created_at
+                    FROM diagnosis_runs
+                    GROUP BY patient_id
+                ) latest_run
+                  ON latest_run.patient_id = r1.patient_id
+                 AND latest_run.max_created_at = r1.created_at
+            ) latest
+            WHERE latest.risk_level = '高风险'
+            """,
+        )['c']
     return [
         {'label': '患者总数', 'value': str(patient_count), 'note': '当前系统已建档患者数量。', 'icon': 'patients'},
         {'label': '高风险患者数', 'value': str(high_risk_count), 'note': '按每位患者最新一次诊断结果统计高风险人数。', 'icon': 'risk'},
@@ -232,10 +249,11 @@ def get_patients() -> list[dict[str, Any]]:
             """
             SELECT p.id, p.patient_code, p.name, p.gender, p.age,
                    p.status, p.current_risk, p.created_at, p.updated_at,
-                   latest.created_at AS latest_run_at
+                   latest.created_at AS latest_run_at,
+                   latest.risk_level AS latest_risk
             FROM patients p
             LEFT JOIN (
-                SELECT r1.patient_id, r1.created_at
+                SELECT r1.patient_id, r1.created_at, r1.risk_level
                 FROM diagnosis_runs r1
                 JOIN (
                     SELECT patient_id, MAX(created_at) AS max_created_at
@@ -260,7 +278,7 @@ def get_patients() -> list[dict[str, Any]]:
             'gender': row['gender'],
             'age': row['age'],
             'status': row['status'],
-            'risk': row['current_risk'],
+            'risk': row['latest_risk'] or row['current_risk'],
             'modalities': modality_map.get(row['id'], []),
             'latestRunAt': row['latest_run_at'],
             'createdAt': row['created_at'],

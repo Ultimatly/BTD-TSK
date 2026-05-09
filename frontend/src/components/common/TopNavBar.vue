@@ -6,7 +6,7 @@
       </div>
       <div class="brand-copy">
         <strong>SomnoLight</strong>
-        <p>多模态睡眠障碍病症轻量化辅助诊断系统</p>
+        <p>多源数据睡眠障碍病症轻量化辅助诊断系统</p>
       </div>
     </div>
     <nav class="nav-links">

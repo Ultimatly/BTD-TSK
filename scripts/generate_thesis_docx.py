@@ -25,12 +25,12 @@ PROJECT_ROOT = Path(r"F:/sleep")
 TEMPLATE_PATH = Path(r"C:/Users/lenovo/Desktop/校区论文参考格式.docx")
 SOURCE_MD = PROJECT_ROOT / "outputs" / "thesis_formula_view.md"
 OUTPUT_DIR = PROJECT_ROOT / "outputs"
-OUTPUT_DOCX = OUTPUT_DIR / "多元数据睡眠障碍病症轻量化辅助诊断系统的设计与实现_论文初稿.docx"
-OUTPUT_PDF = OUTPUT_DIR / "多元数据睡眠障碍病症轻量化辅助诊断系统的设计与实现_论文初稿.pdf"
+OUTPUT_DOCX = OUTPUT_DIR / "多源数据睡眠障碍病症轻量化辅助诊断系统的设计与实现_论文初稿.docx"
+OUTPUT_PDF = OUTPUT_DIR / "多源数据睡眠障碍病症轻量化辅助诊断系统的设计与实现_论文初稿.pdf"
 EQ_CACHE_DIR = OUTPUT_DIR / "_equation_cache"
 
-TITLE_CN = "多元数据睡眠障碍病症轻量化辅助诊断系统的设计与实现"
-TITLE_EN = "Design and Implementation of a Lightweight Auxiliary Diagnosis System for Sleep Disorders Based on Multivariate Data"
+TITLE_CN = "多源数据睡眠障碍病症轻量化辅助诊断系统的设计与实现"
+TITLE_EN = "Design and Implementation of a Lightweight Auxiliary Diagnosis System for Sleep Disorders Based on Multi-Source Data"
 
 
 REFERENCES = [
@@ -91,7 +91,7 @@ FIGURE_PLACEHOLDERS = {
     "3.3 数据处理流程与多元特征构建": [
         (
             "图3-2 数据预处理与多元特征提取流程图",
-            "Fig.3-2 Data preprocessing and multivariate feature extraction pipeline",
+            "Fig.3-2 Data preprocessing and multi-source data feature extraction pipeline",
             "此处建议放置数据预处理与特征提取流程图，图中应展示记录读取、EEG/ECG 通道定位、30 s 切片、EEG 滤波去噪、ECG 峰值检测、22 维特征拼接与归一化流程。",
         )
     ],
@@ -106,24 +106,24 @@ FIGURE_PLACEHOLDERS = {
         (
             "图4-1 Data-A 分组多模型性能对比柱状图",
             "Fig.4-1 Multi-model performance comparison on Data-A",
-            "此处建议根据 result/btd_tsk_comparison_Data-A.txt 绘制 OA、MeanSen 与 Macro-F1 三项指标的分组柱状图。",
+            "此处建议根据实验统计结果绘制 OA、MeanSen 与 Macro-F1 三项指标的分组柱状图。",
         ),
         (
             "图4-2 Data-B 分组多模型性能对比柱状图",
             "Fig.4-2 Multi-model performance comparison on Data-B",
-            "此处建议根据 result/btd_tsk_comparison_Data-B.txt 绘制 OA、MeanSen 与 Macro-F1 三项指标的分组柱状图。",
+            "此处建议根据实验统计结果绘制 OA、MeanSen 与 Macro-F1 三项指标的分组柱状图。",
         )
     ],
     "4.3 混淆矩阵与类别级误差分析": [
         (
             "图4-3 Data-A 分组下 BTD-TSK 模型混淆矩阵",
             "Fig.4-3 Confusion matrix of BTD-TSK on Data-A",
-            "此处建议插入 result/btd_tsk_confusion_Data-A.png，用于展示各睡眠阶段在 Data-A 上的类别级混淆关系。",
+            "此处建议插入 Data-A 分组下的 BTD-TSK 模型混淆矩阵，用于展示各睡眠阶段的类别级混淆关系。",
         ),
         (
             "图4-4 Data-B 分组下 BTD-TSK 模型混淆矩阵",
             "Fig.4-4 Confusion matrix of BTD-TSK on Data-B",
-            "此处建议插入 result/btd_tsk_confusion_Data-B.png，用于展示各睡眠阶段在 Data-B 上的类别级混淆关系。",
+            "此处建议插入 Data-B 分组下的 BTD-TSK 模型混淆矩阵，用于展示各睡眠阶段的类别级混淆关系。",
         ),
     ],
     "5.1 系统定位与总体结构": [
@@ -272,47 +272,51 @@ TABLE_INSERTIONS = {
             ],
         )
     ],
-    "3.7 蒸馏训练策略与后处理机制": [
+    "3.6.2 BiLSTM 教师知识引导的学生后件训练": [
         (
             "表3-7 BTD-TSK 学生模型与蒸馏训练参数",
             "Table 3-7 Student model and distillation parameters of BTD-TSK",
             [
                 ["参数项", "取值"],
-                ["规则数", "10"],
-                ["学习率", "0.02"],
-                ["正则项", "1×10^-5"],
+                ["规则数 R", "10"],
+                ["学习率 η", "0.02"],
+                ["L2 正则系数", "1×10^-5"],
                 ["批大小", "128"],
                 ["最大训练轮数", "200"],
                 ["早停耐心值", "20"],
                 ["蒸馏温度 τ", "1.5"],
-                ["λCE", "1.0"],
-                ["λKD", "0.1"],
+                ["监督损失权重 λCE", "1.0"],
+                ["蒸馏损失权重 λKD", "0.1"],
                 ["指导权重 α", "0.7"],
             ],
         )
     ],
     "3.7.1 训练流程伪代码": [
         (
-            "算法3-1 基于 BiLSTM Teacher Distilled TSK 的训练流程",
-            "Algorithm 3-1 Training procedure of BiLSTM Teacher Distilled TSK",
+            "算法3-1 基于 BiLSTM 教师引导蒸馏的 BTD-TSK 训练过程",
+            "Algorithm 3-1 Training procedure of BTD-TSK with BiLSTM teacher-guided distillation",
             [
-                ["输入：公共多导睡眠图数据集选定记录（MIT-BIH Polysomnographic Database）；规则数 R=10；局部窗口半径 r=2；温度系数 τ；损失权重 λCE、λKD；指导权重 α"],
-                ["输出：训练完成的 BTD-TSK 学生模型参数 {a, σ, B} 及规则文件"],
-                ["1: 读取 EEG、ECG 及睡眠阶段标注文件，并按 30 s 划分为 epoch 样本。"],
-                ["2: 提取 13 维 EEG 工程特征与 9 维 ECG/HRV 工程特征，构成 22 维输入向量。"],
-                ["3: 对样本执行训练测试划分，并在训练集中构造长度为 2r+1 的局部序列窗口。"],
-                ["4: 训练 BiLSTM 教师模型，得到教师 logits、softmax 概率和中心时刻隐藏表示。"],
-                ["5: 按训练标签统计结果为各类别分配规则配额。"],
-                ["6: for c = 1 to C do"],
-                ["    7: 提取第 c 类样本的教师隐藏表示与原始 22 维特征。"],
-                ["    8: 根据教师真实类别概率和预测熵计算样本指导权重。"],
-                ["    9: 在教师隐藏表示空间内对第 c 类样本执行加权 KMeans 聚类。"],
-                ["    10: 将聚类结果映射回原始特征空间，计算对应规则前件中心 a_r 与宽度 σ_r。"],
-                ["11: end for"],
-                ["12: 固定规则前件，计算训练样本的规则激活矩阵 H。"],
-                ["13: 以交叉熵损失和 KL 散度蒸馏损失联合优化后件矩阵 B。"],
-                ["14: 在验证集上执行模型选择与早停，保留最优学生模型。"],
-                ["15: 在测试集上输出分类指标、混淆矩阵与规则解释文件。"],
+                [r"输入：训练样本集合 $\mathcal{D}=\{(\mathbf{x}_n,y_n)\}_{n=1}^{N}$，其中 $\mathbf{x}_n\in\mathbb{R}^{d}$，$d=22$，$y_n\in\{1,2,\ldots,C\}$；规则总数 $R$；局部窗口半径 $r$；蒸馏温度 $\tau$；损失权重 $\lambda_{CE},\lambda_{KD}$；指导权重 $\alpha$；学习率 $\eta$"],
+                [r"输出：学生模型前件参数 $\{(\mathbf{a}_r,\boldsymbol{\sigma}_r)\}_{r=1}^{R}$、后件矩阵 $\mathbf{B}\in\mathbb{R}^{R\times C}$ 以及最终规则集合"],
+                [r"步骤 1：由原始记录构造 epoch 级特征，得到 $\mathbf{x}_n=[\mathbf{x}_n^{EEG},\mathbf{x}_n^{ECG}]$，其中 $\mathbf{x}_n^{EEG}\in\mathbb{R}^{13}$，$\mathbf{x}_n^{ECG}\in\mathbb{R}^{9}$。"],
+                [r"步骤 2：对每个中心样本构造局部序列窗口 $\mathbf{X}_n=[\mathbf{x}_{n-r},\mathbf{x}_{n-r+1},\ldots,\mathbf{x}_{n+r}]\in\mathbb{R}^{(2r+1)\times d}$。"],
+                [r"步骤 3：利用训练集优化 BiLSTM 教师模型参数 $\Theta_T$，即求解 $\Theta_T^\ast=\arg\min_{\Theta_T}\mathcal{L}_T$，其中 $\mathcal{L}_T$ 为教师模型监督损失。"],
+                [r"步骤 4：由教师模型计算 $\mathbf{z}_n^T=f_T(\mathbf{X}_n;\Theta_T^\ast)$、$\mathbf{p}_n^T=\operatorname{softmax}(\mathbf{z}_n^T)$ 以及隐藏表示 $\mathbf{h}_n^T$。"],
+                [r"步骤 5：依据类别样本规模分配规则数 $\{R_c\}_{c=1}^{C}$，满足 $\sum_{c=1}^{C}R_c=R$。"],
+                [r"步骤 6：对 $c=1,2,\ldots,C$ 依次执行如下操作。"],
+                [r"    步骤 6.1：构造类别样本集合 $\mathcal{S}_c=\{n\mid y_n=c\}$。"],
+                [r"    步骤 6.2：计算第 $n$ 个样本的预测熵 $e_n=-\sum_{k=1}^{C}p_{n,k}^{T}\log(p_{n,k}^{T}+\varepsilon)$ 及归一化熵 $\bar e_n=\frac{e_n}{\log C}$。"],
+                [r"    步骤 6.3：计算指导权重 $\omega_n=\alpha p_{n,c}^{T}+(1-\alpha)(1-\bar e_n)$，其中 $n\in\mathcal{S}_c$。"],
+                [r"    步骤 6.4：在教师隐藏表示空间内求解带权聚类目标 $\min \sum_{m=1}^{R_c}\sum_{n\in\mathcal{C}_{c,m}}\omega_n\|\mathbf{h}_n^T-\mathbf{v}_{c,m}\|_2^2$。"],
+                [r"    步骤 6.5：将第 $m$ 个簇映射回原始特征空间，计算规则前件中心 $\mathbf{a}_r=\frac{\sum_{n\in\mathcal{C}_r}\omega_n\mathbf{x}_n}{\sum_{n\in\mathcal{C}_r}\omega_n}$。"],
+                [r"    步骤 6.6：计算前件宽度 $\sigma_{r,j}=\sqrt{\frac{\sum_{n\in\mathcal{C}_r}\omega_n(x_{n,j}-a_{r,j})^2}{\sum_{n\in\mathcal{C}_r}\omega_n}}+\varepsilon$。"],
+                [r"步骤 7：由前件参数计算隶属度 $\mu_{r,j}(x_{n,j})=\exp\!\left(-\frac{(x_{n,j}-a_{r,j})^2}{2\sigma_{r,j}^2}\right)$。"],
+                [r"步骤 8：计算规则触发强度 $f_r(\mathbf{x}_n)=\prod_{j=1}^{d}\mu_{r,j}(x_{n,j})$ 及归一化激活 $\bar f_r(\mathbf{x}_n)=\frac{f_r(\mathbf{x}_n)}{\sum_{k=1}^{R}f_k(\mathbf{x}_n)}$，从而得到激活向量 $\mathbf{h}_n=[\bar f_1(\mathbf{x}_n),\ldots,\bar f_R(\mathbf{x}_n)]$。"],
+                [r"步骤 9：计算学生输出 $\mathbf{z}_n^S=\mathbf{h}_n\mathbf{B}$、$\mathbf{q}_n^S=\operatorname{softmax}(\mathbf{z}_n^S/\tau)$ 以及常温概率 $\mathbf{p}_n^S=\operatorname{softmax}(\mathbf{z}_n^S)$。"],
+                [r"步骤 10：构造监督损失 $\mathcal{L}_{CE}=-\frac{1}{N}\sum_{n=1}^{N}\log p_{n,y_n}^{S}$ 和蒸馏损失 $\mathcal{L}_{KD}=\frac{1}{N}\sum_{n=1}^{N}D_{KL}(\mathbf{q}_n^T\|\mathbf{q}_n^S)$。"],
+                [r"步骤 11：最小化联合目标 $\mathcal{L}=\lambda_{CE}\mathcal{L}_{CE}+\lambda_{KD}\tau^2\mathcal{L}_{KD}$，并采用 Adam 更新后件参数，即 $\mathbf{B}^{(t+1)}=\operatorname{Adam}\!\left(\mathbf{B}^{(t)},\nabla_{\mathbf{B}}\mathcal{L}\right)$。"],
+                [r"步骤 12：在验证集上执行模型选择与早停，得到最优学生模型 $\mathbf{B}^\ast$。"],
+                [r"步骤 13：输出分类指标、混淆矩阵以及规则解释结果。"],
             ],
         )
     ],
@@ -344,12 +348,23 @@ TABLE_INSERTIONS = {
             "Table 5-1 Functional modules and corresponding implementation",
             [
                 ["功能模块", "对应页面", "对应接口", "主要作用"],
-                ["首页概览", "HomeView", "/api/home/*", "展示系统概览、趋势信息与近期任务"],
-                ["患者档案管理", "PatientsView、PatientDetailView", "/api/patients\n/api/patients/{patient_code}/history", "维护患者信息并关联历史诊断记录"],
-                ["模型管理", "ModelView", "/api/models\n/api/models/upload", "完成模型注册、更新、删除与规则入库"],
-                ["诊断任务管理", "AnalysisView", "/api/diagnosis\n/api/diagnosis/{run_code}/status", "上传记录、创建任务并轮询诊断状态"],
-                ["规则中心", "RulesView", "/api/rules\n/api/rules/{rule_id}", "浏览、筛选和查看模型规则解释"],
-                ["历史记录管理", "HistoryView、HistoryDetailView", "/api/history/*", "回看历史结果、下载 CSV 并查看波形"],
+                ["首页概览", "首页", "/api/home/*", "展示系统概览、趋势信息与近期任务"],
+                ["患者档案管理", "患者页、患者详情页", "/api/patients\n/api/patients/{patient_code}/history", "维护患者信息并关联历史诊断记录"],
+                ["模型管理", "模型管理页", "/api/models\n/api/models/upload", "完成模型注册、更新、删除与规则入库"],
+                ["诊断任务管理", "分析页", "/api/diagnosis\n/api/diagnosis/{run_code}/status", "上传记录、创建任务并轮询诊断状态"],
+                ["规则中心", "规则中心页", "/api/rules\n/api/rules/{rule_id}", "浏览、筛选和查看模型规则解释"],
+                ["历史记录管理", "历史页、历史详情页", "/api/history/*", "回看历史结果、下载 CSV 并查看波形"],
+            ],
+        )
+    ],
+    "4.4 训练统计与规则可解释性分析": [
+        (
+            "表4-3 BTD-TSK 代表性规则样例",
+            "Table 4-3 A representative rule example of BTD-TSK",
+            [
+                ["项目", "内容"],
+                ["规则形式", "IF δ 相对功率为中等偏高 AND θ 相对功率为中等偏高 AND α 相对功率为偏低 AND …… AND 谱边缘频率为中等 AND 平均心率为平稳 AND RMSSD 为中等波动 AND SDNN 为中等波动 THEN 睡眠阶段为 N2"],
+                ["规则解释", "该规则体现了稳定非快速眼动睡眠阶段中脑电频带减慢、节律活动趋稳以及心率变异性波动相对平缓的联合特征"],
             ],
         )
     ],
@@ -374,12 +389,12 @@ TABLE_INSERTIONS = {
             "Table 5-3 Mapping among front-end pages, components and business responsibilities",
             [
                 ["页面或视图", "核心内容", "主要职责"],
-                ["HomeView", "统计卡片、趋势图、近期任务", "展示系统运行概览与近期诊断动态"],
-                ["AnalysisView", "患者选择、模型选择、文件上传、结果区", "承载一次完整诊断任务的主工作台"],
-                ["PatientsView / PatientDetailView", "患者列表、详情与历史摘要", "维护患者档案并关联历史结果"],
-                ["RulesView", "规则筛选、规则卡片、规则详情", "集中展示模型规则与可解释信息"],
-                ["HistoryView / HistoryDetailView", "历史列表、详情复看、CSV 下载", "支持既往诊断结果追溯与导出"],
-                ["ModelView", "模型列表、上传、状态编辑", "完成模型注册与规则抽取的前端入口"],
+                ["首页", "统计卡片、趋势图、近期任务", "展示系统运行概览与近期诊断动态"],
+                ["分析页", "患者选择、模型选择、文件上传、结果区", "承载一次完整诊断任务的主工作台"],
+                ["患者页与患者详情页", "患者列表、详情与历史摘要", "维护患者档案并关联历史结果"],
+                ["规则中心页", "规则筛选、规则卡片、规则详情", "集中展示模型规则与可解释信息"],
+                ["历史页与历史详情页", "历史列表、详情复看、CSV 下载", "支持既往诊断结果追溯与导出"],
+                ["模型管理页", "模型列表、上传、状态编辑", "完成模型注册与规则抽取的前端入口"],
             ],
         )
     ],
@@ -407,11 +422,11 @@ TABLE_INSERTIONS = {
             "Table 5-5 System verification items and corresponding implementation",
             [
                 ["验证维度", "对应页面或接口", "验证内容", "当前实现情况"],
-                ["患者管理闭环", "PatientsView\n/api/patients", "患者新增、修改、删除与历史关联查询", "已实现"],
-                ["模型注册闭环", "ModelView\n/api/models/upload", "学生模型上传、校验与规则自动入库", "已实现"],
-                ["诊断执行闭环", "AnalysisView\n/api/diagnosis", "记录上传、任务创建、状态轮询与结果返回", "已实现"],
-                ["结果解释闭环", "DiagnosisResultDetail\n/api/rules、/api/waveform", "阶段统计、规则解释与波形联动展示", "已实现"],
-                ["历史回看闭环", "HistoryView、HistoryDetailView\n/api/history/*", "历史详情查看、CSV 导出与记录删除", "已实现"],
+                ["患者管理闭环", "患者页\n/api/patients", "患者新增、修改、删除与历史关联查询", "已实现"],
+                ["模型注册闭环", "模型管理页\n/api/models/upload", "学生模型上传、校验与规则自动入库", "已实现"],
+                ["诊断执行闭环", "分析页\n/api/diagnosis", "记录上传、任务创建、状态轮询与结果返回", "已实现"],
+                ["结果解释闭环", "结果详情区域\n/api/rules、/api/waveform", "阶段统计、规则解释与波形联动展示", "已实现"],
+                ["历史回看闭环", "历史页、历史详情页\n/api/history/*", "历史详情查看、CSV 导出与记录删除", "已实现"],
             ],
         ),
         (
@@ -691,6 +706,55 @@ def set_table_three_line(table):
         elem.set(qn("w:color"), "000000")
 
 
+def set_cell_border(cell, edge: str, val: str = "single", sz: str = "8", color: str = "000000"):
+    tc = cell._tc
+    tc_pr = tc.get_or_add_tcPr()
+    tc_borders = tc_pr.first_child_found_in("w:tcBorders")
+    if tc_borders is None:
+        tc_borders = OxmlElement("w:tcBorders")
+        tc_pr.append(tc_borders)
+    tag = f"w:{edge}"
+    elem = tc_borders.find(qn(tag))
+    if elem is None:
+        elem = OxmlElement(tag)
+        tc_borders.append(elem)
+    elem.set(qn("w:val"), val)
+    if val != "nil":
+        elem.set(qn("w:sz"), sz)
+        elem.set(qn("w:space"), "0")
+        elem.set(qn("w:color"), color)
+
+
+def set_algorithm_table_style(table, divider_after_row: int = 1):
+    tbl = table._tbl
+    tbl_pr = tbl.tblPr
+    tbl_borders = tbl_pr.first_child_found_in("w:tblBorders")
+    if tbl_borders is None:
+        tbl_borders = OxmlElement("w:tblBorders")
+        tbl_pr.append(tbl_borders)
+    for edge in ("left", "right", "insideV", "insideH"):
+        tag = f"w:{edge}"
+        elem = tbl_borders.find(qn(tag))
+        if elem is None:
+            elem = OxmlElement(tag)
+            tbl_borders.append(elem)
+        elem.set(qn("w:val"), "nil")
+    for edge in ("top", "bottom"):
+        tag = f"w:{edge}"
+        elem = tbl_borders.find(qn(tag))
+        if elem is None:
+            elem = OxmlElement(tag)
+            tbl_borders.append(elem)
+        elem.set(qn("w:val"), "single")
+        elem.set(qn("w:sz"), "8")
+        elem.set(qn("w:space"), "0")
+        elem.set(qn("w:color"), "000000")
+
+    if 0 <= divider_after_row < len(table.rows):
+        for cell in table.rows[divider_after_row].cells:
+            set_cell_border(cell, "bottom", "single", "8", "000000")
+
+
 def set_row_height(row, height_cm: float):
     tr_pr = row._tr.get_or_add_trPr()
     tr_height = OxmlElement("w:trHeight")
@@ -774,7 +838,7 @@ def add_algorithm_table(anchor, title_cn: str, title_en: str, rows: list[list[st
             p.paragraph_format.left_indent = Cm(0.74 * indent_level)
             for run in p.runs:
                 set_font(run, "宋体", 10.5)
-    set_table_three_line(table)
+    set_algorithm_table_style(table, divider_after_row=1)
     return table
 
 
@@ -1101,7 +1165,7 @@ def add_abstract_section(anchor, text: str):
     add_heading(anchor, "摘 要", 1)
     for paragraph in cn_paragraphs:
         add_body(anchor, paragraph)
-    add_keywords(anchor, "关键词：", "睡眠分期；多元数据；知识蒸馏；TSK 模糊系统；轻量化辅助诊断")
+    add_keywords(anchor, "关键词：", "睡眠分期；多源数据；知识蒸馏；TSK 模糊系统；轻量化辅助诊断")
 
     page_break = anchor.insert_paragraph_before()
     page_break.add_run().add_break(WD_BREAK.PAGE)
@@ -1124,7 +1188,7 @@ def add_abstract_section(anchor, text: str):
     add_keywords(
         anchor,
         "Keywords: ",
-        "sleep staging; multivariate data; knowledge distillation; TSK fuzzy system; lightweight auxiliary diagnosis",
+        "sleep staging; multi-source data; knowledge distillation; TSK fuzzy system; lightweight auxiliary diagnosis",
         english=True,
     )
 
