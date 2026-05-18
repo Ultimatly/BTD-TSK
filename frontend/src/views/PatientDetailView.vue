@@ -143,8 +143,8 @@ const STAGE_LABEL_MAP = {
   N3: 'N3',
   R: 'R',
   REM: 'R',
-  清醒阶段: 'W',
-  清醒: 'W',
+  W阶段: 'W',
+  W: 'W',
 }
 
 function deriveFocusLabel(record) {
@@ -161,7 +161,7 @@ function deriveFocusLabel(record) {
 
   const text = `${record.summary || ''} ${record.conclusion || ''}`
   const patterns = [
-    [/清醒阶段|清醒相关变化/, 'W'],
+    [/W阶段|W相关变化/, 'W'],
     [/\bN1\b|N1阶段/, 'N1'],
     [/\bN2\b|N2阶段/, 'N2'],
     [/\bN3\b|N3阶段/, 'N3'],

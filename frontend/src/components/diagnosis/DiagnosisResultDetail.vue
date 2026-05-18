@@ -295,7 +295,7 @@ const emit = defineEmits(['download'])
 const modelDisplayName = computed(() => props.detail?.model?.name || props.detail?.model?.code || '--')
 
 const STAGE_NAME_MAP = {
-  W: '清醒',
+  W: 'W',
   N1: 'N1',
   N2: 'N2',
   N3: 'N3',

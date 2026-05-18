@@ -29,6 +29,7 @@ try:
         extract_ecg_hrv_features_optimized,
         extract_engineered_eeg_features,
         get_label_mapping,
+        select_preferred_eeg_index,
         wavelet_denoise,
     )
     from predict_btd_tsk import apply_sleep_jump_smoothing, compute_metrics
@@ -41,13 +42,23 @@ DATASET_CONFIGS = {
     'Data-A': ['slp01a', 'slp02a', 'slp02b', 'slp14', 'slp32', 'slp37', 'slp41', 'slp45', 'slp60'],
     'Data-B': ['slp01b', 'slp03', 'slp04', 'slp16', 'slp48', 'slp59', 'slp61', 'slp66', 'slp67x'],
 }
+DATASET_CONFIGS['Data-All'] = DATASET_CONFIGS['Data-A'] + DATASET_CONFIGS['Data-B']
 CLASS_LABELS_CN = {
-    'W': '清醒',
+    'W': 'W',
     'N1': 'N1',
     'N2': 'N2',
     'N3': 'N3',
     'R': 'REM',
 }
+DEFAULT_C4_EEG_PREFERENCES = (
+    'EEG (C4-A1)',
+    'C4-A1',
+    'EEG C4-A1',
+    'EEG C4-M1',
+    'C4-M1',
+    'PSG_C4',
+    'C4',
+)
 
 
 def _format_stage_cn(stage_label: str | None, with_stage: bool = False) -> str:
@@ -63,7 +74,7 @@ def _infer_dataset_name(model_path: str | Path) -> str:
     for dataset_name in DATASET_CONFIGS:
         if dataset_name in stem:
             return dataset_name
-    return 'Data-A'
+    return 'Data-All'
 
 
 @lru_cache(maxsize=len(DATASET_CONFIGS))
@@ -76,6 +87,20 @@ def _build_training_scaler(dataset_name: str):
             random_state=FINAL_SEED,
         )
     return bundle['scaler']
+
+
+def _get_model_scaler(model, dataset_name: str):
+    scaler = getattr(model, 'feature_scaler', None)
+    if scaler is not None:
+        return scaler
+    return _build_training_scaler(dataset_name)
+
+
+def _get_model_eeg_preferences(model) -> tuple[str, ...] | None:
+    preferences = getattr(model, 'preferred_eeg_channels', None)
+    if preferences is None:
+        return DEFAULT_C4_EEG_PREFERENCES
+    return tuple(str(item) for item in preferences if str(item).strip())
 
 
 def _find_record_stem(upload_dir: Path) -> tuple[str | None, str | None]:
@@ -112,13 +137,19 @@ def _extract_epoch_features(eeg_epoch: np.ndarray, ecg_epoch: np.ndarray | None,
     return np.concatenate([eeg_features, ecg_features], axis=0)
 
 
-def _load_wfdb_epoch_features(upload_dir: Path, record_stem: str) -> tuple[np.ndarray, np.ndarray | None, list[dict[str, Any]], dict[str, Any]]:
+def _load_wfdb_epoch_features(
+    upload_dir: Path,
+    record_stem: str,
+    preferred_eeg_channels: tuple[str, ...] | None = None,
+) -> tuple[np.ndarray, np.ndarray | None, list[dict[str, Any]], dict[str, Any]]:
     record = wfdb.rdrecord(str(upload_dir / record_stem))
     fs = float(record.fs)
-    eeg_idx = _find_signal_index(record.sig_name, ['EEG'])
+    eeg_idx = select_preferred_eeg_index(record.sig_name, preferred_names=preferred_eeg_channels)
     if eeg_idx == -1:
-        raise ValueError(f'记录 {record_stem} 中未找到 EEG 通道。')
+        raise ValueError(f'无适配通道：记录 {record_stem} 中未找到可用的 C4 EEG 通道。')
     ecg_idx = _find_signal_index(record.sig_name, ['ECG', 'EKG'])
+    if ecg_idx == -1:
+        raise ValueError(f'无适配通道：记录 {record_stem} 中未找到 ECG 通道。')
     eeg_signal = np.asarray(record.p_signal[:, eeg_idx], dtype=float)
     ecg_signal = np.asarray(record.p_signal[:, ecg_idx], dtype=float) if ecg_idx != -1 else None
 
@@ -182,15 +213,21 @@ def _load_wfdb_epoch_features(upload_dir: Path, record_stem: str) -> tuple[np.nd
     return np.asarray(X_rows, dtype=float), y_array, metadata, preview
 
 
-def _load_edf_epoch_features(upload_dir: Path, record_stem: str) -> tuple[np.ndarray, np.ndarray | None, list[dict[str, Any]], dict[str, Any]]:
+def _load_edf_epoch_features(
+    upload_dir: Path,
+    record_stem: str,
+    preferred_eeg_channels: tuple[str, ...] | None = None,
+) -> tuple[np.ndarray, np.ndarray | None, list[dict[str, Any]], dict[str, Any]]:
     edf_path = upload_dir / f'{record_stem}.edf'
     raw = mne.io.read_raw_edf(str(edf_path), preload=True, verbose='ERROR')
     fs = float(raw.info['sfreq'])
     ch_names = list(raw.ch_names)
-    eeg_idx = _find_signal_index(ch_names, ['EEG'])
+    eeg_idx = select_preferred_eeg_index(ch_names, preferred_names=preferred_eeg_channels)
     if eeg_idx == -1:
-        raise ValueError(f'记录 {record_stem} 中未找到 EEG 通道。')
+        raise ValueError(f'无适配通道：记录 {record_stem} 中未找到可用的 C4 EEG 通道。')
     ecg_idx = _find_signal_index(ch_names, ['ECG', 'EKG'])
+    if ecg_idx == -1:
+        raise ValueError(f'无适配通道：记录 {record_stem} 中未找到 ECG 通道。')
     signal_matrix = raw.get_data().T
     eeg_signal = np.asarray(signal_matrix[:, eeg_idx], dtype=float)
     ecg_signal = np.asarray(signal_matrix[:, ecg_idx], dtype=float) if ecg_idx != -1 else None
@@ -239,13 +276,13 @@ def _load_edf_epoch_features(upload_dir: Path, record_stem: str) -> tuple[np.nda
     return np.asarray(X_rows, dtype=float), y_array, metadata, preview
 
 
-def _load_uploaded_feature_matrix(upload_dir: Path):
+def _load_uploaded_feature_matrix(upload_dir: Path, preferred_eeg_channels: tuple[str, ...] | None = None):
     record_type, record_stem = _find_record_stem(upload_dir)
     if not record_type or not record_stem:
         raise ValueError('未在上传目录中找到可用的记录文件。')
     if record_type == 'wfdb':
-        return _load_wfdb_epoch_features(upload_dir, record_stem)
-    return _load_edf_epoch_features(upload_dir, record_stem)
+        return _load_wfdb_epoch_features(upload_dir, record_stem, preferred_eeg_channels=preferred_eeg_channels)
+    return _load_edf_epoch_features(upload_dir, record_stem, preferred_eeg_channels=preferred_eeg_channels)
 
 
 def _downsample_signal(signal: np.ndarray, max_points: int = 480) -> list[float]:
@@ -327,7 +364,7 @@ def _compose_diagnosis_texts(
 
     if risk == '高风险':
         if focus == 'W':
-            conclusion = f'清醒阶段占比达到 {focus_text}，提示夜间觉醒偏多，睡眠连续性较差。'
+            conclusion = f'W阶段占比达到 {focus_text}，提示夜间觉醒偏多，睡眠连续性较差。'
             advice = f'建议重点关注夜间觉醒和睡眠维持情况。若连续多次监测仍表现为 {focus_text}，可进一步结合主诉与临床评估判断是否存在睡眠维持障碍。'
         elif focus == 'N3':
             conclusion = f'当前以 {dominant_text} 为主，但 {focus_text} 占比偏低，提示深睡眠不足。'
@@ -438,12 +475,15 @@ def extract_rule_activations(
     X_scaled: np.ndarray | None = None,
 ) -> list[dict[str, Any]]:
     dataset_name = _infer_dataset_name(model_path)
-    if scaler is None:
-      scaler = _build_training_scaler(dataset_name)
     if model is None:
         model = load_joblib_model(model_path)
+    if scaler is None:
+        scaler = _get_model_scaler(model, dataset_name)
     if X_scaled is None:
-        X_raw, _, _, _ = _load_uploaded_feature_matrix(upload_dir)
+        X_raw, _, _, _ = _load_uploaded_feature_matrix(
+            upload_dir,
+            preferred_eeg_channels=_get_model_eeg_preferences(model),
+        )
         X_scaled = scaler.transform(X_raw)
     activations = model.compute_rule_activations(X_scaled)
     mean_activation = np.mean(activations, axis=0)
@@ -507,10 +547,13 @@ def repair_diagnosis_texts(
 
 def run_diagnosis(model_path: str | Path, upload_dir: Path, run_code: str) -> dict[str, Any]:
     dataset_name = _infer_dataset_name(model_path)
-    scaler = _build_training_scaler(dataset_name)
     model = load_joblib_model(model_path)
+    scaler = _get_model_scaler(model, dataset_name)
 
-    X_raw, y_true, metadata, _ = _load_uploaded_feature_matrix(upload_dir)
+    X_raw, y_true, metadata, _ = _load_uploaded_feature_matrix(
+        upload_dir,
+        preferred_eeg_channels=_get_model_eeg_preferences(model),
+    )
     if len(X_raw) == 0:
         raise ValueError('上传数据未提取到有效样本。')
 

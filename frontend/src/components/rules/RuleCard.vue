@@ -55,7 +55,7 @@
             </div>
 
             <div class="detail-panel">
-              <h3>如果</h3>
+              <h3>IF</h3>
               <ul class="antecedent-list">
                 <li v-for="item in rule.antecedents || []" :key="`${rule.id}-${item.feature}`">
                   <div class="antecedent-main">
@@ -71,7 +71,7 @@
             </div>
 
             <div class="detail-panel consequence-panel">
-              <h3>那么</h3>
+              <h3>THEN</h3>
               <p>输出倾向于 {{ rule.consequence?.label || rule.target }}（后件权重 P={{ formatNumber(rule.consequence?.p) }}）</p>
             </div>
           </div>

@@ -292,6 +292,8 @@ class BTDTSKDistiller:
         lambda_anchor=0.0,
         antecedent_guidance='none',
         guidance_alpha=0.7,
+        teacher_kwargs=None,
+        student_kwargs=None,
     ):
         self.student_n_rules = student_n_rules
         self.sequence_radius = sequence_radius
@@ -304,13 +306,19 @@ class BTDTSKDistiller:
         self.lambda_anchor = lambda_anchor
         self.antecedent_guidance = antecedent_guidance
         self.guidance_alpha = guidance_alpha
+        self.teacher_kwargs = {} if teacher_kwargs is None else dict(teacher_kwargs)
+        self.student_kwargs = {} if student_kwargs is None else dict(student_kwargs)
         self.teacher_model = None
+        student_params = {
+            'n_rules': student_n_rules,
+            'seed': seed,
+            'antecedent_strategy': antecedent_strategy,
+            'kd_mode': kd_mode,
+            'lambda_anchor': lambda_anchor,
+        }
+        student_params.update(self.student_kwargs)
         self.student_model = ZeroOrderTSKGDClassifier(
-            n_rules=student_n_rules,
-            seed=seed,
-            antecedent_strategy=antecedent_strategy,
-            kd_mode=kd_mode,
-            lambda_anchor=lambda_anchor,
+            **student_params,
         )
         self.training_details = {}
 
@@ -433,6 +441,7 @@ class BTDTSKDistiller:
             input_dim=X_sequence.shape[2],
             num_classes=num_classes,
             seed=self.seed,
+            **self.teacher_kwargs,
         )
         self.teacher_model.fit(X_sequence, y)
         teacher_logits = self.teacher_model.predict_logits(X_sequence)

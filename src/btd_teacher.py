@@ -94,14 +94,18 @@ class BiLSTMSequenceClassifier:
         self.patience = patience
         self.seed = seed
         self.device = device or ('cuda' if torch.cuda.is_available() else 'cpu')
-        self.model = BiLSTMTeacherNet(
-            input_dim=input_dim,
-            hidden_dim=hidden_dim,
-            num_layers=num_layers,
-            num_classes=num_classes,
-            dropout=dropout,
-        ).to(self.device)
+        self.model = None
         self.summary = None
+
+    def _build_model(self):
+        self.model = BiLSTMTeacherNet(
+            input_dim=self.input_dim,
+            hidden_dim=self.hidden_dim,
+            num_layers=self.num_layers,
+            num_classes=self.num_classes,
+            dropout=self.dropout,
+        ).to(self.device)
+        return self.model
 
     def _make_loader(self, X, y=None, shuffle=False):
         X_tensor = torch.tensor(X, dtype=torch.float32)
@@ -115,6 +119,7 @@ class BiLSTMSequenceClassifier:
     def fit(self, X, y):
         torch.manual_seed(self.seed)
         np.random.seed(self.seed)
+        self._build_model()
 
         idx = np.arange(len(y))
         train_idx, val_idx = train_test_split(

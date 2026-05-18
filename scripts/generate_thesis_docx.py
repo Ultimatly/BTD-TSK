@@ -22,7 +22,7 @@ from docx.shared import Cm, Mm, Pt, RGBColor
 
 
 PROJECT_ROOT = Path(r"F:/sleep")
-TEMPLATE_PATH = Path(r"C:/Users/lenovo/Desktop/校区论文参考格式.docx")
+TEMPLATE_PATH = Path(r"C:/Users/lenovo/Desktop/多源数据睡眠障碍病症轻量化辅助诊断系统的设计与实现_论文初稿.docx")
 SOURCE_MD = PROJECT_ROOT / "outputs" / "thesis_formula_view.md"
 OUTPUT_DIR = PROJECT_ROOT / "outputs"
 OUTPUT_DOCX = OUTPUT_DIR / "多源数据睡眠障碍病症轻量化辅助诊断系统的设计与实现_论文初稿.docx"
@@ -79,6 +79,41 @@ REFERENCES = [
     "[43] Zhang Y, Wang G, Zhou T, Huang X, Lam H K, Sheng J, Choi K S, Cai J, Ding W. Takagi-Sugeno-Kang Fuzzy System Fusion: A Survey at Hierarchical, Wide and Stacked Levels[J]. Information Fusion, 2024, 101: 101977.",
 ]
 
+REFERENCE_MAP = {
+    int(re.match(r"\[(\d+)\]", item).group(1)): item
+    for item in REFERENCES
+    if re.match(r"\[(\d+)\]", item)
+}
+
+RED_HEADINGS = {
+    "摘 要",
+    "Abstract",
+    "3.2 数据来源、记录组成与标签定义",
+    "第四章 实验设计与结果分析",
+    "4.1 实验数据、环境与对比设置",
+    "4.2 总体性能对比分析",
+    "4.3 混淆矩阵与类别级召回分析",
+    "4.4 多次实验稳定性与规则可解释性分析",
+    "4.4.1 鲁棒性分析",
+    "4.4.2 规则可解释性分析",
+    "4.4 规则可解释性分析",
+    "4.5 结果讨论与局限性分析",
+    "结论",
+    "参考文献",
+}
+
+
+FIGURE_IMAGE_FILES = {
+    "图4-1 多模型平均性能对比图": OUTPUT_DIR / "图4-23_SLPDB多模型平均性能对比图.png",
+    "图4-2 BTD-TSK混淆矩阵": OUTPUT_DIR / "图4-2_BTD-TSK混淆矩阵.png",
+    "图4-3 不同噪声强度下模型鲁棒性对比图": OUTPUT_DIR / "图4-3_不同噪声强度下模型鲁棒性对比图.png",
+    "图5-1 轻量化辅助诊断系统总体架构图": OUTPUT_DIR / "图5-1_轻量化辅助诊断系统总体架构图.png",
+    "图5-2 系统功能模块图": OUTPUT_DIR / "图5-2_系统功能模块图.png",
+    "图5-3 系统诊断业务流程图": OUTPUT_DIR / "图5-3_系统诊断业务流程图.png",
+    "图5-4 后端文字诊断结果生成流程图": OUTPUT_DIR / "图5-4_后端文字诊断结果生成流程图.png",
+    "图5-5 核心数据实体关系图": OUTPUT_DIR / "图5-5_核心数据ER图.png",
+}
+
 
 FIGURE_PLACEHOLDERS = {
     "3.1 研究动机与总体框架": [
@@ -104,64 +139,78 @@ FIGURE_PLACEHOLDERS = {
     ],
     "4.2 总体性能对比分析": [
         (
-            "图4-1 Data-A 分组多模型性能对比柱状图",
-            "Fig.4-1 Multi-model performance comparison on Data-A",
-            "此处建议根据实验统计结果绘制 OA、MeanSen 与 Macro-F1 三项指标的分组柱状图。",
-        ),
-        (
-            "图4-2 Data-B 分组多模型性能对比柱状图",
-            "Fig.4-2 Multi-model performance comparison on Data-B",
-            "此处建议根据实验统计结果绘制 OA、MeanSen 与 Macro-F1 三项指标的分组柱状图。",
+            "图4-1 多模型平均性能对比图",
+            "Fig.4-1 Average performance comparison of multiple models",
+            "此处建议根据固定特征方案下多次重复实验的平均结果绘制 OA、MeanSen 与 Macro-F1 三项指标的分组柱状图，并在柱顶标注平均值、使用误差线表示标准差。",
         )
     ],
-    "4.3 混淆矩阵与类别级误差分析": [
+    "4.3 混淆矩阵与类别级召回分析": [
         (
-            "图4-3 Data-A 分组下 BTD-TSK 模型混淆矩阵",
-            "Fig.4-3 Confusion matrix of BTD-TSK on Data-A",
-            "此处建议插入 Data-A 分组下的 BTD-TSK 模型混淆矩阵，用于展示各睡眠阶段的类别级混淆关系。",
-        ),
-        (
-            "图4-4 Data-B 分组下 BTD-TSK 模型混淆矩阵",
-            "Fig.4-4 Confusion matrix of BTD-TSK on Data-B",
-            "此处建议插入 Data-B 分组下的 BTD-TSK 模型混淆矩阵，用于展示各睡眠阶段的类别级混淆关系。",
-        ),
+            "图4-2 BTD-TSK混淆矩阵",
+            "Fig.4-2 Confusion matrix of BTD-TSK",
+            "此处建议展示本文方法的混淆矩阵，用于分析 N1、N3 与 REM 等少数类的错分模式以及相对普通规则模型的召回改善情况。",
+        )
     ],
-    "5.1 系统定位与总体结构": [
+    "4.4.1 鲁棒性分析": [
+        (
+            "图4-3 不同噪声强度下模型鲁棒性对比图",
+            "Fig.4-3 Robustness comparison under different noise levels",
+            "此处建议采用折线图展示不同高斯噪声强度下各模型整体准确率的变化趋势，并结合表格分析性能衰减幅度。",
+        )
+    ],
+    "5.2 系统总体结构与功能划分": [
         (
             "图5-1 轻量化辅助诊断系统总体架构图",
             "Fig.5-1 Overall architecture of the lightweight auxiliary diagnosis system",
             "此处建议放置系统架构图，图中应展示前端、后端、数据库、模型文件目录、上传文件目录和结果产物目录之间的关系。",
         ),
         (
-            "图5-2 系统诊断业务流程图",
-            "Fig.5-2 Diagnostic workflow of the system",
-            "此处建议绘制从患者选择、模型选择、记录上传到后台推理和结果展示的业务流程图。",
+            "图5-2 系统功能模块图",
+            "Fig.5-2 Functional module diagram of the system",
+            "此处建议绘制系统功能模块图，展示首页概览、患者管理、模型管理、诊断分析、规则中心、历史回看和结果导出等模块及其子功能。",
         ),
     ],
-    "5.2 后端服务与 API 设计": [
+    "5.3.1 诊断任务创建与状态流转": [
         (
-            "图5-3 诊断接口时序图",
-            "Fig.5-3 Sequence diagram of the diagnostic API",
-            "此处建议绘制用户浏览器、分析页面、FastAPI 服务、后台线程和数据库之间的请求时序关系。",
+            "图5-3 系统诊断业务流程图",
+            "Fig.5-3 Diagnostic workflow of the system",
+            "此处建议按照标准流程图方式绘制系统诊断业务流程，展示患者选择、文件上传、任务创建、后台推理、结果回写和页面展示过程。",
         ),
     ],
-    "5.3 前端页面组织与结果展示": [
+    "5.3.2 后端文字诊断结果生成机制": [
         (
-            "图5-4 诊断分析页面示意图",
-            "Fig.5-4 Diagnostic analysis interface",
-            "此处建议放置分析页面截图，展示患者选择、模型选择、文件上传、状态反馈与结果区域。",
-        ),
-        (
-            "图5-5 历史详情或规则中心页面示意图",
-            "Fig.5-5 History detail or rule center interface",
-            "此处建议放置历史详情页面或规则中心页面截图，突出规则解释与结果回看功能。",
+            "图5-4 后端文字诊断结果生成流程图",
+            "Fig.5-4 Flowchart of textual diagnostic result generation in backend",
+            "此处建议绘制后端根据逐 epoch 预测结果、阶段占比和风险阈值生成 summary、conclusion 与 advice 的流程图。",
         ),
     ],
-    "5.5 系统验证": [
+    "5.4 ?????????": [
         (
-            "图5-6 系统功能闭环示意图",
-            "Fig.5-6 Functional closed-loop demonstration of the system",
-            "此处建议放置分析页、结果页与历史详情页的串联截图或功能闭环示意图。",
+            "?5-5 ?????????",
+            "Fig.5-5 Core entity relationship diagram of the system",
+            "??????????????????????????????? epoch ????????????????",
+        ),
+        (
+            "?5-6 ??????",
+            "Fig.5-6 Database structure diagram of the system",
+            "?????? PPT ???????????????????????????????????????? epoch ???????????????????????????????????",
+        ),
+    ],
+    "5.5 ??????": [
+        (
+            "?5-7 ?????????",
+            "Fig.5-7 Diagnostic analysis interface",
+            "????????????????????????????????????????",
+        ),
+        (
+            "?5-8 ?????????",
+            "Fig.5-8 History detail interface",
+            "?????????????????????????????????????????",
+        ),
+        (
+            "?5-9 ??????????????",
+            "Fig.5-9 Rule center or model management interface",
+            "????????????????????????????????????????????",
         ),
     ],
 }
@@ -174,7 +223,7 @@ TABLE_INSERTIONS = {
             "Table 2-1 Label mapping of sleep staging",
             [
                 ["原始标签", "映射类别", "含义"],
-                ["W", "W", "清醒阶段"],
+                ["W", "W", "W阶段"],
                 ["1", "N1", "入睡过渡阶段"],
                 ["2", "N2", "稳定非快速眼动睡眠阶段"],
                 ["3/4", "N3", "深睡阶段"],
@@ -204,25 +253,23 @@ TABLE_INSERTIONS = {
                 ["原始记录格式", "WFDB 记录对（.dat + .hea），并配有睡眠阶段及 ECG 相关标注文件"],
                 ["标注来源", "记录对应的睡眠阶段注释（.st）及数据库原始辅助标注"],
                 ["任务标签体系", "W、N1、N2、N3、REM 五分类"],
-                ["实验使用范围", "从公共资源中选取 18 个记录组成 Data-A 与 Data-B"],
+                ["实验使用范围", "使用整套 18 个记录，并在固定特征方案下通过多次重复实验完成训练集与测试集划分"],
             ],
         ),
         (
-            "表3-2 实验数据分组与记录组成",
-            "Table 3-2 Dataset split and record composition",
+            "表3-2 整体实验记录组成",
+            "Table 3-2 Record composition of the whole dataset",
             [
-                ["数据分组", "记录编号", "记录数量", "说明"],
-                ["Data-A", "slp01a、slp02a、slp02b、slp14、slp32、slp37、slp41、slp45、slp60", "9", "用于组内随机划分训练集与测试集"],
-                ["Data-B", "slp01b、slp03、slp04、slp16、slp48、slp59、slp61、slp66、slp67x", "9", "用于组内随机划分训练集与测试集"],
+                ["记录集合", "记录编号", "记录数量", "说明"],
+                ["Data-All", "slp01a、slp01b、slp02a、slp02b、slp03、slp04、slp14、slp16、slp32、slp37、slp41、slp45、slp48、slp59、slp60、slp61、slp66、slp67x", "18", "在相同特征方案下多次随机划分训练集与测试集"],
             ],
         ),
         (
-            "表3-3 Data-A 与 Data-B 的样本规模及类别分布",
-            "Table 3-3 Sample scale and class distribution of Data-A and Data-B",
+            "表3-3 整体数据集样本规模及类别分布",
+            "Table 3-3 Sample scale and class distribution of the whole dataset",
             [
-                ["分组", "总样本数", "训练集样本数", "测试集样本数", "W", "N1", "N2", "N3", "REM"],
-                ["Data-A", "5157", "3867", "1290", "1582", "897", "1972", "338", "368"],
-                ["Data-B", "5024", "3768", "1256", "1533", "918", "1915", "326", "332"],
+                ["数据集", "总样本数", "划分方式", "W", "N1", "N2", "N3", "REM"],
+                ["Data-All", "10181", "多次随机划分并统计平均结果", "3115", "1815", "3887", "664", "700"],
             ],
         ),
     ],
@@ -333,34 +380,53 @@ TABLE_INSERTIONS = {
             ],
         ),
         (
-            "表4-2 训练统计与收敛结果摘要",
-            "Table 4-2 Summary of training statistics and convergence results",
+            "表4-2 主实验设置摘要",
+            "Table 4-2 Summary of the main experimental setting",
             [
-                ["数据分组", "教师最优验证损失", "教师最优验证准确率", "教师训练轮数", "学生最优验证损失", "学生最优验证准确率", "学生训练轮数", "教师平均置信度"],
-                ["Data-A", "0.591981", "72.12%", "30", "0.952345", "65.75%", "46", "0.7835"],
-                ["Data-B", "0.733379", "64.84%", "30", "0.984618", "64.31%", "71", "0.7002"],
+                ["项目", "设置内容"],
+                ["数据使用方式", "使用 MIT-BIH Polysomnographic Database 的全部 18 个记录作为整体数据集"],
+                ["重复实验方式", "在固定特征方案下进行多次随机划分训练与测试，并统计平均值与标准差"],
+                ["EEG/ECG 特征", "Welch 13 维 EEG 特征 + 9 维 ECG/HRV 特征，共 22 维"],
+                ["BTD-TSK 规则数", "20"],
+                ["前件生成方式", "classwise + teacher_embedding"],
+                ["蒸馏与训练参数", "temperature=1.5，lambda_kd=0.06，teacher 40/8，student 140/18，lr=0.015，batch_size=64"],
             ],
         )
     ],
-    "5.1 系统定位与总体结构": [
+    "5.1 系统定位与运行环境": [
         (
-            "表5-1 系统功能模块与对应实现",
-            "Table 5-1 Functional modules and corresponding implementation",
+            "表5-1 系统运行环境与测试工具",
+            "Table 5-1 Operating environment and test tools of the system",
             [
-                ["功能模块", "对应页面", "对应接口", "主要作用"],
-                ["首页概览", "首页", "/api/home/*", "展示系统概览、趋势信息与近期任务"],
-                ["患者档案管理", "患者页、患者详情页", "/api/patients\n/api/patients/{patient_code}/history", "维护患者信息并关联历史诊断记录"],
-                ["模型管理", "模型管理页", "/api/models\n/api/models/upload", "完成模型注册、更新、删除与规则入库"],
-                ["诊断任务管理", "分析页", "/api/diagnosis\n/api/diagnosis/{run_code}/status", "上传记录、创建任务并轮询诊断状态"],
-                ["规则中心", "规则中心页", "/api/rules\n/api/rules/{rule_id}", "浏览、筛选和查看模型规则解释"],
-                ["历史记录管理", "历史页、历史详情页", "/api/history/*", "回看历史结果、下载 CSV 并查看波形"],
+                ["项目", "配置说明"],
+                ["操作系统", "Microsoft Windows 11 家庭中文版，64 位"],
+                ["处理器", "Intel Core i9-14900HX"],
+                ["内存", "16 GB"],
+                ["后端框架与解释器", "FastAPI，Python 3.10.19"],
+                ["前端框架与构建环境", "Vue 3，Vite，Node.js 22.16.0，npm 11.12.1"],
+                ["数据持久化环境", "SQLite 本地数据库与文件目录联合存储"],
+                ["算法执行环境", "本地 BTD-TSK 模型与多源特征提取流程"],
+                ["系统部署形态", "单机浏览器/服务端分离式研究原型"],
             ],
         )
     ],
-    "4.4 训练统计与规则可解释性分析": [
+    "4.4.1 鲁棒性分析": [
         (
-            "表4-3 BTD-TSK 代表性规则样例",
-            "Table 4-3 A representative rule example of BTD-TSK",
+            "表4-3 不同噪声强度下的鲁棒性对比",
+            "Table 4-3 Robustness comparison under different noise levels",
+            [
+                ["模型", "σ=0.00 OA/%", "σ=0.03 OA/%", "σ=0.06 OA/%", "σ=0.09 OA/%"],
+                ["TSK-LLM", "59.58", "58.68", "57.76", "54.31"],
+                ["TSK-GD", "59.21", "58.33", "57.49", "53.94"],
+                ["BiLSTM", "67.80", "67.19", "64.39", "61.74"],
+                ["BTD-TSK", "64.01", "54.29", "43.91", "37.75"],
+            ],
+        )
+    ],
+    "4.4.2 规则可解释性分析": [
+        (
+            "表4-4 BTD-TSK 代表性规则样例",
+            "Table 4-4 A representative rule example of BTD-TSK",
             [
                 ["项目", "内容"],
                 ["规则形式", "IF δ 相对功率为中等偏高 AND θ 相对功率为中等偏高 AND α 相对功率为偏低 AND …… AND 谱边缘频率为中等 AND 平均心率为平稳 AND RMSSD 为中等波动 AND SDNN 为中等波动 THEN 睡眠阶段为 N2"],
@@ -368,76 +434,131 @@ TABLE_INSERTIONS = {
             ],
         )
     ],
-    "5.2 后端服务与 API 设计": [
+    "5.2 系统总体结构与功能划分": [
         (
-            "表5-2 系统核心 API 设计",
-            "Table 5-2 Core API design of the system",
+            "表5-2 系统功能模块说明",
+            "Table 5-2 Functional modules of the system",
             [
-                ["资源类型", "请求方法与路径", "主要用途"],
-                ["首页概览", "GET /api/home/overview\nGET /api/home/trend", "返回概览统计与趋势数据"],
-                ["患者管理", "GET/POST /api/patients\nPUT/DELETE /api/patients/{patient_code}", "完成患者信息增删改查"],
-                ["模型管理", "GET /api/models\nPOST /api/models/upload\nPUT/DELETE /api/models/{model_code}", "完成模型注册、更新和删除"],
-                ["规则管理", "GET /api/rules\nGET /api/rules/{rule_id}", "加载规则中心数据与单条规则详情"],
-                ["历史查询", "GET /api/history/*\nDELETE /api/history/{run_code}", "查看历史记录详情并导出结果"],
-                ["诊断任务", "POST /api/diagnosis\nGET /api/diagnosis/{run_code}/*", "创建任务、轮询状态并获取结果"],
+                ["模块名称", "关键页面或接口", "核心输入", "核心输出", "主要作用"],
+                ["首页概览模块", "首页与 /api/home/* 接口", "任务统计信息", "概览卡片、趋势曲线、近期任务", "提供系统运行概貌与近期诊断动态"],
+                ["患者管理模块", "患者页与 /api/patients 接口", "患者基本信息", "患者列表、患者历史摘要", "完成患者建档、修改、删除与历史关联"],
+                ["模型管理模块", "模型页与 /api/models 接口", "模型元数据、模型文件", "模型列表、模型详情、状态信息", "完成模型注册、状态维护与版本查看"],
+                ["诊断分析模块", "分析页与 /api/diagnosis 接口", "患者编号、模型编号、记录文件", "任务状态、阶段统计、文字结论、规则激活", "承载诊断任务创建、轮询与结果展示主链路"],
+                ["规则中心模块", "规则页与 /api/rules 接口", "模型编号、类别筛选条件", "规则列表、规则详情、条件参数", "完成模型规则的全局检索与解释展示"],
+                ["历史回看模块", "历史页与 /api/history/* 接口", "历史任务编号", "历史详情、波形预览、导出结果", "支持既往诊断结果追溯、复核与导出"],
             ],
         )
     ],
-    "5.3 前端页面组织与结果展示": [
+    "5.3.1 ???????????": [
         (
-            "表5-3 前端页面、核心组件与业务职责对应关系",
-            "Table 5-3 Mapping among front-end pages, components and business responsibilities",
+            "?5-3 ????????",
+            "Table 5-3 State definition of diagnostic task",
             [
-                ["页面或视图", "核心内容", "主要职责"],
-                ["首页", "统计卡片、趋势图、近期任务", "展示系统运行概览与近期诊断动态"],
-                ["分析页", "患者选择、模型选择、文件上传、结果区", "承载一次完整诊断任务的主工作台"],
-                ["患者页与患者详情页", "患者列表、详情与历史摘要", "维护患者档案并关联历史结果"],
-                ["规则中心页", "规则筛选、规则卡片、规则详情", "集中展示模型规则与可解释信息"],
-                ["历史页与历史详情页", "历史列表、详情复看、CSV 下载", "支持既往诊断结果追溯与导出"],
-                ["模型管理页", "模型列表、上传、状态编辑", "完成模型注册与规则抽取的前端入口"],
+                ["???", "????", "??????", "??????"],
+                ["queued", "????????", "????????????????", "????????????????"],
+                ["processing", "????????", "??????????????????????", "??????????????"],
+                ["done", "??????????????????", "??????????????", "????????????????????"],
+                ["failed", "????????????", "????????????????", "???????????????"],
             ],
         )
     ],
-    "5.4 数据组织与诊断执行链路": [
+    "5.4 ?????????": [
         (
-            "表5-4 主要数据表设计说明",
-            "Table 5-4 Main database tables and their purposes",
+            "?5-4 ??????",
+            "Table 5-4 Core API design of the system",
             [
-                ["数据表", "关键字段", "主要用途"],
-                ["patients", "patient_code、name、gender、age、current_risk", "保存患者基础信息与当前风险状态"],
-                ["patient_modalities", "patient_id、modality", "保存患者关联的数据模态标签"],
-                ["models", "model_code、name、version、status、file_path", "保存模型文件及元数据"],
-                ["model_rules", "model_id、rule_no、target_class、consequence_p", "保存模型规则主信息"],
-                ["model_rule_conditions", "rule_id、feature_label、a_value、sigma_value", "保存规则前件条件参数"],
-                ["diagnosis_runs", "run_code、patient_id、model_id、status、risk_level", "保存诊断任务主记录"],
-                ["diagnosis_stage_stats", "run_id、stage_label、percentage", "保存阶段占比统计结果"],
-                ["diagnosis_rule_activations", "run_id、model_rule_id、activation_strength", "保存任务级规则激活排序结果"],
-                ["diagnosis_predictions", "run_id、epoch_index、pred_raw、pred_final", "保存逐 epoch 预测与概率分布"],
+                ["????", "?????", "????", "??????", "????"],
+                ["??????", "GET /api/home/overview\nGET /api/home/trend\nGET /api/home/recent-runs", "????", "??????????????", "??????????"],
+                ["??????", "GET/POST /api/patients\nPUT/DELETE /api/patients/{patient_code}", "JSON ?????", "??????????????", "???????????????"],
+                ["??????", "GET /api/models\nGET /api/models/{model_code}\nPOST /api/models/upload", "????? multipart/form-data", "???????????????", "?????????????"],
+                ["??????", "GET /api/rules\nGET /api/rules/{rule_id}", "?????????", "??????????????", "?????????????"],
+                ["??????", "GET /api/history/*\nDELETE /api/history/{run_code}", "????", "?????????????????", "???????????"],
+                ["??????", "POST /api/diagnosis\nGET /api/diagnosis/{run_code}/*", "multipart/form-data ?????", "???????????????????", "????????????????"],
             ],
         )
     ],
-    "5.5 系统验证": [
+    "5.6.1 ?????????": [
         (
-            "表5-5 系统验证内容与对应实现",
-            "Table 5-5 System verification items and corresponding implementation",
+            "?5-6 ???????????",
+            "Table 5-6 Test levels and acceptance criteria of the system",
             [
-                ["验证维度", "对应页面或接口", "验证内容", "当前实现情况"],
-                ["患者管理闭环", "患者页\n/api/patients", "患者新增、修改、删除与历史关联查询", "已实现"],
-                ["模型注册闭环", "模型管理页\n/api/models/upload", "学生模型上传、校验与规则自动入库", "已实现"],
-                ["诊断执行闭环", "分析页\n/api/diagnosis", "记录上传、任务创建、状态轮询与结果返回", "已实现"],
-                ["结果解释闭环", "结果详情区域\n/api/rules、/api/waveform", "阶段统计、规则解释与波形联动展示", "已实现"],
-                ["历史回看闭环", "历史页、历史详情页\n/api/history/*", "历史详情查看、CSV 导出与记录删除", "已实现"],
+                ["????", "????", "????"],
+                ["???????", "???????????????", "??????????????????"],
+                ["??????", "?????????????????", "?????????????????"],
+                ["??????", "????????????????", "?????????????????"],
+                ["???????", "????????????????????", "????????????????"],
+                ["???????", "??????????????????", "??????????????????"],
+            ],
+        )
+    ],
+    "5.6.2 ???????": [
+        (
+            "表5-7 代表性接口测试用例",
+            "Table 5-7 Representative API test cases",
+            [
+                ["测试编号", "接口路径", "输入条件", "关键检查点", "实际结果", "判定"],
+                ["API-01", "GET /health", "无", "检查服务是否正常启动", "返回 200，状态字段为 ok", "通过"],
+                ["API-02", "POST /api/patients", "提交合法患者 JSON 数据", "检查患者记录能否成功创建", "返回 200，患者信息入库成功", "通过"],
+                ["API-03", "GET /api/models/{model_code}", "提交有效模型编号", "检查模型详情字段是否完整", "返回模型名称、版本、状态和输入维度信息", "通过"],
+                ["API-04", "GET /api/rules/{rule_id}", "提交有效规则编号", "检查规则前件和后件信息是否可读", "返回规则条件列表与目标类别信息", "通过"],
+                ["API-05", "POST /api/diagnosis", "提交合法患者编号、模型编号和多导睡眠图记录", "检查任务能否成功创建", "返回 200，并生成任务编号", "通过"],
+                ["API-06", "GET /api/diagnosis/{run_code}/status", "提交有效任务编号", "检查任务状态轮询结果", "状态可由 queued 推进至 done", "通过"],
+                ["API-07", "GET /api/history/{run_code}/detail", "提交有效历史任务编号", "检查详情结果是否完整", "返回阶段统计、文字结论、规则结果和产物信息", "通过"],
+                ["API-08", "POST /api/diagnosis", "缺少文件字段", "检查参数缺失时的错误反馈", "返回 422 参数校验错误", "通过"],
             ],
         ),
         (
-            "表5-6 典型功能测试用例",
-            "Table 5-6 Representative functional test cases",
+            "表5-8 接口测试结果统计",
+            "Table 5-8 Statistics of API test results",
             [
-                ["测试编号", "测试场景", "输入条件", "预期结果"],
-                ["TC-01", "标准诊断流程", "患者、模型与记录文件均合法", "任务状态由 queued 进入 done，并返回阶段结果与规则解释"],
-                ["TC-02", "WFDB 文件缺失", "仅上传 .dat 或仅上传 .hea", "任务创建失败或进入 failed，并返回格式错误提示"],
-                ["TC-03", "模型对象不合法", "上传缺少规则成员的模型文件", "模型注册失败，不写入模型表和规则表"],
-                ["TC-04", "历史结果回看", "访问已完成任务的历史详情页", "能够加载阶段统计、规则列表、波形预览与 CSV 下载入口"],
+                ["接口类别", "测试点数", "通过数", "未通过数", "通过率", "说明"],
+                ["基础服务接口", "1", "1", "0", "100.0%", "服务健康检查正常"],
+                ["首页统计接口", "3", "3", "0", "100.0%", "概览、趋势与近期任务均可返回"],
+                ["患者管理接口", "5", "5", "0", "100.0%", "增删改查及历史查询均正常"],
+                ["模型与规则接口", "4", "4", "0", "100.0%", "模型详情与规则查询均正常"],
+                ["历史结果接口", "6", "6", "0", "100.0%", "历史详情、规则、波形与导出均可读取"],
+                ["诊断任务接口", "6", "6", "0", "100.0%", "任务创建、轮询、结果读取均正常"],
+                ["异常校验接口", "2", "2", "0", "100.0%", "缺失参数与非法字段均被拦截"],
+                ["合计", "27", "27", "0", "100.0%", "接口测试点全部通过"],
+            ],
+        ),
+    ],
+    "5.6.3 功能闭环测试": [
+        (
+            "表5-9 典型功能测试用例",
+            "Table 5-9 Representative functional test cases",
+            [
+                ["测试功能", "前置条件", "操作步骤", "关键观察点", "测试结果", "判定"],
+                ["患者建档与删除", "系统服务已正常运行", "创建临时患者，查询其历史信息后删除该患者", "患者记录可创建、可查询且可被删除", "符合预期", "通过"],
+                ["诊断任务发起", "存在有效患者与有效模型", "在分析页上传一组合法记录并提交任务", "系统返回任务编号并进入状态轮询", "符合预期", "通过"],
+                ["诊断结果展示", "任务状态变为 done", "查看分析页结果区域", "页面显示阶段统计、风险等级、文字结论和规则激活信息", "符合预期", "通过"],
+                ["历史详情回看", "历史记录中存在已完成任务", "进入历史详情页面查看既往任务", "详情页可读取统计结果、规则结果和波形预览", "符合预期", "通过"],
+                ["规则中心检索", "模型规则已入库", "切换模型并按类别筛选规则", "规则列表和规则详情能随筛选条件更新", "符合预期", "通过"],
+                ["结果导出", "任务已完成且导出文件已生成", "下载逐 epoch 预测结果文件", "浏览器可成功获取导出文件", "符合预期", "通过"],
+            ],
+        ),
+    ],
+    "5.6.4 异常输入与结果一致性验证": [
+        (
+            "表5-10 异常输入测试结果",
+            "Table 5-10 Exception-input test results",
+            [
+                ["异常场景", "输入缺陷", "预期处理方式", "实际结果", "判定"],
+                ["缺失文件上传", "创建诊断任务时省略记录文件", "系统返回参数校验错误并阻止任务创建", "返回 422 错误，任务未创建", "通过"],
+                ["非法业务字段", "创建患者时提交非法性别值", "系统返回业务校验错误并拒绝写库", "返回 400 错误，数据未写入", "通过"],
+                ["无效任务编号访问", "使用不存在的任务编号请求详情", "系统返回未找到提示", "返回错误提示，未产生异常崩溃", "通过"],
+            ],
+        ),
+        (
+            "表5-11 结果一致性核查结果",
+            "Table 5-11 Result-consistency verification",
+            [
+                ["核查维度", "对照数据源", "核查内容", "核查结果"],
+                ["任务状态一致性", "diagnosis_runs 与状态轮询接口", "检查 queued、processing、done 状态是否一致", "一致"],
+                ["阶段统计一致性", "diagnosis_stage_stats 与页面统计图", "检查五类阶段占比是否一致", "一致"],
+                ["文字结果一致性", "diagnosis_runs 与详情接口返回", "检查 risk_level、summary、conclusion、advice 是否一致", "一致"],
+                ["规则结果一致性", "diagnosis_rule_activations 与详情页规则列表", "检查规则排序与激活强度展示是否一致", "一致"],
+                ["导出结果一致性", "diagnosis_predictions 与导出文件", "检查逐 epoch 预测结果是否一致", "一致"],
             ],
         ),
     ],
@@ -458,7 +579,7 @@ SECTION_EXPANSIONS = {
     ],
     "3.2 EEG 与 ECG 特征提取方法": [
         "采用工程化特征而非原始波形直接输入，是本项目在算法设计上的一个基础判断。其原因在于，当前系统定位于轻量化辅助诊断，推理阶段需要尽量压缩计算量，同时保留可被规则系统使用的显式语义。经过预处理后的 EEG 频带功率、谱熵、Hjorth 参数与波形长度等指标，能够从不同侧面描述节律组成、信号复杂度与形态波动；ECG 派生出的 HRV 特征则补充了自主神经调节相关信息。两类特征在表达维度上互补，为后续模糊规则建模提供了较为稳定的输入基础。",
-        "从睡眠生理机理看，EEG 与 ECG 所反映的信号属性并不相同。EEG 更直接对应皮层电活动的节律变化，能够刻画清醒、浅睡、深睡和快速眼动阶段在频谱上的差异；ECG 则通过 RR 间期波动间接反映交感与副交感神经平衡状态，对于阶段转换、睡眠稳定性以及异常唤醒相关变化具有补充价值。项目中将两种模态信息统一为 22 维特征向量，并不是将其简单拼接，而是在保留各自生理解释的前提下，构建一个便于教师网络学习、也便于学生规则划分的公共判别空间。",
+        "从睡眠生理机理看，EEG 与 ECG 所反映的信号属性并不相同。EEG 更直接对应皮层电活动的节律变化，能够刻画W、浅睡、深睡和快速眼动阶段在频谱上的差异；ECG 则通过 RR 间期波动间接反映交感与副交感神经平衡状态，对于阶段转换、睡眠稳定性以及异常唤醒相关变化具有补充价值。项目中将两种模态信息统一为 22 维特征向量，并不是将其简单拼接，而是在保留各自生理解释的前提下，构建一个便于教师网络学习、也便于学生规则划分的公共判别空间。",
         "特征维度控制同样体现了轻量化约束。若盲目增加频带分辨率、非线性统计量或更复杂的频域指标，理论上可能提升表示能力，但同时会带来规则前件维数增长、聚类不稳定和推理成本上升等问题。当前实现保留 13 维 EEG 特征与 9 维 ECG 特征，本质上是在信息充分性与模型紧凑性之间做出的折中选择。后续实验结果表明，这一维度设置已经能够支撑规则系统获得优于普通 TSK 基线的分类性能。"
     ],
     "3.3 BiLSTM 教师模型设计": [
@@ -503,7 +624,7 @@ SECTION_EXPANSIONS = {
         "从使用结果看，系统能够将算法模型输出转化为更适合人工阅读的结构化信息，这一点对于辅助诊断场景尤为重要。阶段占比图表帮助用户快速把握整夜睡眠结构，风险提示为进一步观察提供方向，规则激活列表与波形预览则为复核提供依据。虽然这些功能并不构成临床决策本身，但它们使模型预测结果从“一个分类脚本输出”转变为“可浏览、可追踪、可导出的辅助分析记录”，体现了系统实现部分在整篇论文中的必要性。"
     ],
     "5.5 局限性分析": [
-        "尽管本文方法在当前项目范围内取得了较为完整的实现效果，但其局限性同样需要明确指出。其一，训练与测试划分采用组内固定随机种子的随机拆分方式，尚未扩展到更严格的跨受试者泛化评估；其二，输入特征仍然依赖人工构造，虽然带来了较好的解释性，却可能损失部分原始波形中的细粒度时序信息；其三，风险提示模块依据阶段占比阈值生成提示文本，本质上属于启发式辅助判断，而非面向具体病种的诊断模型。",
+        "尽管本文方法在当前项目范围内取得了较为完整的实现效果，但其局限性同样需要明确指出。其一，训练与测试划分采用组内随机拆分并通过多次重复实验统计结果的方式，尚未扩展到更严格的跨受试者泛化评估；其二，输入特征仍然依赖人工构造，虽然带来了较好的解释性，却可能损失部分原始波形中的细粒度时序信息；其三，风险提示模块依据阶段占比阈值生成提示文本，本质上属于启发式辅助判断，而非面向具体病种的诊断模型。",
         "从系统实现角度看，当前方案也保留了明显的轻量化取舍。数据库采用本地 SQLite，适合单机或小规模受控场景；后台任务采用线程方式处理，更强调流程闭环而非高并发吞吐；前端展示聚焦诊断、规则与历史分析，没有引入更复杂的权限体系、审计追踪和远程协作能力。这些取舍并不意味着系统设计不足，而是表明本文工作严格服从于既有实现边界。将来若面向更大规模或更接近临床流程的场景，需要在数据规模、任务编排、模型验证和安全机制上继续扩展。"
     ],
     "结论": [
@@ -527,6 +648,21 @@ def remove_table(table):
 def clear_range(doc: Document, start_idx: int, end_idx: int) -> None:
     for paragraph in list(doc.paragraphs[start_idx:end_idx + 1]):
         remove_paragraph(paragraph)
+
+
+def clear_following_body_content(paragraph) -> None:
+    element = paragraph._p
+    parent = element.getparent()
+    following = []
+    seen_anchor = False
+    for child in list(parent.iterchildren()):
+        if child is element:
+            seen_anchor = True
+            continue
+        if seen_anchor:
+            following.append(child)
+    for child in following:
+        child.getparent().remove(child)
 
 
 def remove_tables_before_first_chapter(doc: Document) -> None:
@@ -555,6 +691,66 @@ def set_font(run, name_cn: str, size_pt: float, bold: bool = False, italic: bool
     run.font.size = Pt(size_pt)
     run.bold = bold
     run.italic = italic
+
+
+def apply_red(paragraph):
+    for run in paragraph.runs:
+        run.font.color.rgb = RGBColor(0xC0, 0x00, 0x00)
+
+
+CITATION_PATTERN = re.compile(r"(\[(?:\d+(?:\s*[-,，]\s*\d+)*)\])")
+
+
+def clone_run_style(src_run, dst_run):
+    if src_run.font.name:
+        dst_run.font.name = src_run.font.name
+    try:
+        rfonts = src_run._element.rPr.rFonts
+        east_asia = rfonts.get(qn("w:eastAsia"))
+        if east_asia:
+            dst_run._element.rPr.rFonts.set(qn("w:eastAsia"), east_asia)
+    except Exception:
+        pass
+    if src_run.font.size:
+        dst_run.font.size = src_run.font.size
+    if src_run.bold is not None:
+        dst_run.bold = src_run.bold
+    if src_run.italic is not None:
+        dst_run.italic = src_run.italic
+    if src_run.underline is not None:
+        dst_run.underline = src_run.underline
+    if src_run.font.color.rgb is not None:
+        dst_run.font.color.rgb = src_run.font.color.rgb
+
+
+def iter_all_paragraphs(doc: Document):
+    for paragraph in doc.paragraphs:
+        yield paragraph
+    for table in doc.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                for paragraph in cell.paragraphs:
+                    yield paragraph
+
+
+def highlight_citation_numbers(doc: Document):
+    red = RGBColor(0xC0, 0x00, 0x00)
+    for paragraph in iter_all_paragraphs(doc):
+        if not paragraph.runs:
+            continue
+        full_text = "".join(run.text for run in paragraph.runs)
+        if not CITATION_PATTERN.search(full_text):
+            continue
+        template_run = paragraph.runs[0]
+        for run in list(paragraph.runs):
+            run._element.getparent().remove(run._element)
+        for part in re.split(CITATION_PATTERN, full_text):
+            if not part:
+                continue
+            run = paragraph.add_run(part)
+            clone_run_style(template_run, run)
+            if CITATION_PATTERN.fullmatch(part):
+                run.font.color.rgb = red
 
 
 def configure_styles(doc: Document) -> None:
@@ -613,7 +809,14 @@ def add_body(anchor, text: str):
     return p
 
 
-def add_heading(anchor, text: str, level: int):
+def add_body_colored(anchor, text: str, red: bool = False):
+    p = add_body(anchor, text)
+    if red:
+        apply_red(p)
+    return p
+
+
+def add_heading(anchor, text: str, level: int, red: bool = False):
     p = anchor.insert_paragraph_before(text)
     p.style = f"Heading {level}"
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER if level == 1 else WD_ALIGN_PARAGRAPH.LEFT
@@ -626,10 +829,12 @@ def add_heading(anchor, text: str, level: int):
             set_font(run, "黑体", 14, bold=True)
         else:
             set_font(run, "黑体", 12, bold=True)
+    if red:
+        apply_red(p)
     return p
 
 
-def add_keywords(anchor, label: str, content: str, english: bool = False):
+def add_keywords(anchor, label: str, content: str, english: bool = False, red: bool = False):
     p = anchor.insert_paragraph_before()
     p.paragraph_format.line_spacing = Pt(20)
     p.paragraph_format.first_line_indent = Cm(0)
@@ -644,16 +849,26 @@ def add_keywords(anchor, label: str, content: str, english: bool = False):
         set_font(run2, "Times New Roman", 12, ascii_name="Times New Roman")
     else:
         set_font(run2, "宋体", 12)
+    if red:
+        apply_red(p)
     return p
 
 
-def add_figure_placeholder(anchor, caption_cn: str, caption_en: str, note: str):
-    note_p = anchor.insert_paragraph_before(f"【此处需自行插入图片】{note}")
-    format_body(note_p)
-    note_p.paragraph_format.first_line_indent = Cm(0)
-    for run in note_p.runs:
-        set_font(run, "宋体", 12, bold=True)
-        run.font.color.rgb = RGBColor(0xC0, 0x00, 0x00)
+def add_figure_placeholder(anchor, caption_cn: str, caption_en: str, note: str, red: bool = False):
+    image_path = FIGURE_IMAGE_FILES.get(caption_cn)
+    if image_path and image_path.exists():
+        pic_p = anchor.insert_paragraph_before("")
+        pic_p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        pic_p.paragraph_format.first_line_indent = Cm(0)
+        pic_run = pic_p.add_run()
+        pic_run.add_picture(str(image_path), width=Cm(15.8))
+    else:
+        note_p = anchor.insert_paragraph_before(f"【此处需自行插入图片】{note}")
+        format_body(note_p)
+        note_p.paragraph_format.first_line_indent = Cm(0)
+        for run in note_p.runs:
+            set_font(run, "宋体", 12, bold=True)
+            run.font.color.rgb = RGBColor(0xC0, 0x00, 0x00)
 
     cap_cn = anchor.insert_paragraph_before(caption_cn)
     cap_cn.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -661,6 +876,8 @@ def add_figure_placeholder(anchor, caption_cn: str, caption_en: str, note: str):
     cap_cn.paragraph_format.first_line_indent = Cm(0)
     for run in cap_cn.runs:
         set_font(run, "宋体", 10.5)
+    if red:
+        apply_red(cap_cn)
 
     cap_en = anchor.insert_paragraph_before(caption_en)
     cap_en.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -668,6 +885,8 @@ def add_figure_placeholder(anchor, caption_cn: str, caption_en: str, note: str):
     cap_en.paragraph_format.first_line_indent = Cm(0)
     for run in cap_en.runs:
         set_font(run, "Times New Roman", 10.5, ascii_name="Times New Roman")
+    if red:
+        apply_red(cap_en)
 
 
 def add_red_note(anchor, text: str):
@@ -763,13 +982,15 @@ def set_row_height(row, height_cm: float):
     tr_pr.append(tr_height)
 
 
-def add_table(anchor, title_cn: str, title_en: str, rows: list[list[str]]):
+def add_table(anchor, title_cn: str, title_en: str, rows: list[list[str]], red: bool = False):
     cap_cn = anchor.insert_paragraph_before(title_cn)
     cap_cn.alignment = WD_ALIGN_PARAGRAPH.CENTER
     cap_cn.paragraph_format.line_spacing = Pt(20)
     cap_cn.paragraph_format.first_line_indent = Cm(0)
     for run in cap_cn.runs:
         set_font(run, "宋体", 10.5)
+    if red:
+        apply_red(cap_cn)
 
     cap_en = anchor.insert_paragraph_before(title_en)
     cap_en.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -777,6 +998,8 @@ def add_table(anchor, title_cn: str, title_en: str, rows: list[list[str]]):
     cap_en.paragraph_format.first_line_indent = Cm(0)
     for run in cap_en.runs:
         set_font(run, "Times New Roman", 10.5, ascii_name="Times New Roman")
+    if red:
+        apply_red(cap_en)
 
     table = anchor._parent.add_table(rows=len(rows), cols=len(rows[0]), width=Cm(15.5))
     anchor._p.addprevious(table._tbl)
@@ -795,17 +1018,21 @@ def add_table(anchor, title_cn: str, title_en: str, rows: list[list[str]]):
                         set_font(run, "黑体", 10.5, bold=True)
                     else:
                         set_font(run, "宋体", 10.5)
+                    if red:
+                        run.font.color.rgb = RGBColor(0xC0, 0x00, 0x00)
     set_table_three_line(table)
     return table
 
 
-def add_algorithm_table(anchor, title_cn: str, title_en: str, rows: list[list[str]]):
+def add_algorithm_table(anchor, title_cn: str, title_en: str, rows: list[list[str]], red: bool = False):
     cap_cn = anchor.insert_paragraph_before(title_cn)
     cap_cn.alignment = WD_ALIGN_PARAGRAPH.CENTER
     cap_cn.paragraph_format.line_spacing = Pt(20)
     cap_cn.paragraph_format.first_line_indent = Cm(0)
     for run in cap_cn.runs:
         set_font(run, "宋体", 10.5)
+    if red:
+        apply_red(cap_cn)
 
     cap_en = anchor.insert_paragraph_before(title_en)
     cap_en.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -813,6 +1040,8 @@ def add_algorithm_table(anchor, title_cn: str, title_en: str, rows: list[list[st
     cap_en.paragraph_format.first_line_indent = Cm(0)
     for run in cap_en.runs:
         set_font(run, "Times New Roman", 10.5, ascii_name="Times New Roman")
+    if red:
+        apply_red(cap_en)
 
     table = anchor._parent.add_table(rows=len(rows), cols=1, width=Cm(15.5))
     anchor._p.addprevious(table._tbl)
@@ -838,16 +1067,18 @@ def add_algorithm_table(anchor, title_cn: str, title_en: str, rows: list[list[st
             p.paragraph_format.left_indent = Cm(0.74 * indent_level)
             for run in p.runs:
                 set_font(run, "宋体", 10.5)
+                if red:
+                    run.font.color.rgb = RGBColor(0xC0, 0x00, 0x00)
     set_algorithm_table_style(table, divider_after_row=1)
     return table
 
 
-def insert_custom_tables(anchor, heading_text: str):
+def insert_custom_tables(anchor, heading_text: str, red: bool = False):
     for title_cn, title_en, rows in TABLE_INSERTIONS.get(heading_text, []):
         if title_cn.startswith("算法"):
-            add_algorithm_table(anchor, title_cn, title_en, rows)
+            add_algorithm_table(anchor, title_cn, title_en, rows, red=red)
         else:
-            add_table(anchor, title_cn, title_en, rows)
+            add_table(anchor, title_cn, title_en, rows, red=red)
 
 
 def remove_table_borders(table):
@@ -927,7 +1158,7 @@ def add_equation(anchor, equation_text: str, number_text: str):
     return table
 
 
-def add_reference(anchor, text: str):
+def add_reference(anchor, text: str, red: bool = False):
     p = anchor.insert_paragraph_before(text)
     p.alignment = WD_ALIGN_PARAGRAPH.LEFT
     p.paragraph_format.first_line_indent = Mm(-7)
@@ -937,6 +1168,8 @@ def add_reference(anchor, text: str):
     p.paragraph_format.space_after = Pt(0)
     for run in p.runs:
         set_font(run, "宋体", 10.5)
+    if red:
+        apply_red(p)
     return p
 
 
@@ -996,6 +1229,47 @@ def extract_final_text() -> str:
     for old, new in REPLACEMENTS.items():
         final_text = final_text.replace(old, new)
     return final_text
+
+
+def extract_reference_map_from_source() -> dict[int, str]:
+    text = SOURCE_MD.read_text(encoding="utf-8")
+    if "\n## 参考文献" not in text:
+        return dict(REFERENCE_MAP)
+    ref_block = text.split("\n## 参考文献", 1)[1]
+    if "\n## 致谢" in ref_block:
+        ref_block = ref_block.split("\n## 致谢", 1)[0]
+    ref_map: dict[int, str] = {}
+    for line in ref_block.splitlines():
+        line = line.strip()
+        match = re.match(r"\[(\d+)\]\s*(.+)", line)
+        if match:
+            ref_map[int(match.group(1))] = f"[{match.group(1)}] {match.group(2)}"
+    return ref_map or dict(REFERENCE_MAP)
+
+
+def renumber_citations(text: str, reference_map: dict[int, str] | None = None) -> tuple[str, list[str]]:
+    reference_map = dict(REFERENCE_MAP) if reference_map is None else reference_map
+    ordered_old_nums: list[int] = []
+
+    def collect(match: re.Match[str]) -> str:
+        old_num = int(match.group(1))
+        if old_num not in ordered_old_nums and old_num in reference_map:
+            ordered_old_nums.append(old_num)
+        return match.group(0)
+
+    re.sub(r"\[(\d+)\]", collect, text)
+    citation_map = {old: idx + 1 for idx, old in enumerate(ordered_old_nums)}
+
+    def replace(match: re.Match[str]) -> str:
+        old_num = int(match.group(1))
+        return f"[{citation_map.get(old_num, old_num)}]"
+
+    renumbered_text = re.sub(r"\[(\d+)\]", replace, text)
+    ordered_references = []
+    for old_num in ordered_old_nums:
+        ref = reference_map[old_num]
+        ordered_references.append(re.sub(r"^\[\d+\]", f"[{citation_map[old_num]}]", ref))
+    return renumbered_text, ordered_references
 
 
 def parse_markdown_blocks(text: str):
@@ -1162,10 +1436,10 @@ def add_abstract_section(anchor, text: str):
     cn_paragraphs = extract_abstract_paragraphs(text, "## 摘 要", "## Abstract")
     en_paragraphs = extract_abstract_paragraphs(text, "## Abstract", "## 第一章 绪论")
 
-    add_heading(anchor, "摘 要", 1)
+    add_heading(anchor, "摘 要", 1, red=True)
     for paragraph in cn_paragraphs:
-        add_body(anchor, paragraph)
-    add_keywords(anchor, "关键词：", "睡眠分期；多源数据；知识蒸馏；TSK 模糊系统；轻量化辅助诊断")
+        add_body_colored(anchor, paragraph, red=True)
+    add_keywords(anchor, "关键词：", "睡眠分期；多源数据；知识蒸馏；TSK 模糊系统；轻量化辅助诊断", red=True)
 
     page_break = anchor.insert_paragraph_before()
     page_break.add_run().add_break(WD_BREAK.PAGE)
@@ -1177,6 +1451,7 @@ def add_abstract_section(anchor, text: str):
     p.paragraph_format.first_line_indent = Cm(0)
     for run in p.runs:
         set_font(run, "Times New Roman", 15, bold=True, ascii_name="Times New Roman")
+    apply_red(p)
 
     for paragraph in en_paragraphs:
         p = anchor.insert_paragraph_before(paragraph)
@@ -1185,11 +1460,13 @@ def add_abstract_section(anchor, text: str):
         p.paragraph_format.line_spacing = Pt(20)
         for run in p.runs:
             set_font(run, "Times New Roman", 12, ascii_name="Times New Roman")
+        apply_red(p)
     add_keywords(
         anchor,
         "Keywords: ",
         "sleep staging; multi-source data; knowledge distillation; TSK fuzzy system; lightweight auxiliary diagnosis",
         english=True,
+        red=True,
     )
 
     page_break2 = anchor.insert_paragraph_before()
@@ -1202,6 +1479,7 @@ def add_body_sections(anchor, blocks):
     eq_counter: dict[int, int] = {}
     in_body = False
     pending_table_heading: str | None = None
+    current_red = False
 
     for kind, content in blocks:
         if kind == "h1" and content == "摘 要":
@@ -1216,7 +1494,8 @@ def add_body_sections(anchor, blocks):
             continue
 
         if kind == "h1":
-            add_heading(anchor, content, 1)
+            current_red = content in RED_HEADINGS
+            add_heading(anchor, content, 1, red=current_red)
             match = re.search(r"第([一二三四五六七八九十]+)章", content)
             if match:
                 mapping = {"一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9, "十": 10}
@@ -1227,17 +1506,23 @@ def add_body_sections(anchor, blocks):
             continue
 
         if kind == "h2":
-            add_heading(anchor, content, 2)
+            current_red = content in RED_HEADINGS
+            add_heading(anchor, content, 2, red=current_red)
             pending_table_heading = content if content in TABLE_INSERTIONS else None
             for title, placeholders in FIGURE_PLACEHOLDERS.items():
                 if content == title:
                     for item in placeholders:
-                        add_figure_placeholder(anchor, *item)
+                        add_figure_placeholder(anchor, *item, red=current_red)
             continue
 
         if kind == "h3":
-            add_heading(anchor, content, 3)
+            current_red = content in RED_HEADINGS
+            add_heading(anchor, content, 3, red=current_red)
             pending_table_heading = content if content in TABLE_INSERTIONS else None
+            for title, placeholders in FIGURE_PLACEHOLDERS.items():
+                if content == title:
+                    for item in placeholders:
+                        add_figure_placeholder(anchor, *item, red=current_red)
             continue
 
         if kind == "p":
@@ -1245,16 +1530,16 @@ def add_body_sections(anchor, blocks):
                 # Markdown 版保留人工补图说明，Word 版由预设图位说明统一生成，避免重复。
                 pass
             else:
-                add_body(anchor, content)
+                add_body_colored(anchor, content, red=current_red)
             if pending_table_heading is not None:
-                insert_custom_tables(anchor, pending_table_heading)
+                insert_custom_tables(anchor, pending_table_heading, red=current_red)
                 pending_table_heading = None
             continue
 
         if kind == "list":
-            add_body(anchor, content)
+            add_body_colored(anchor, content, red=current_red)
             if pending_table_heading is not None:
-                insert_custom_tables(anchor, pending_table_heading)
+                insert_custom_tables(anchor, pending_table_heading, red=current_red)
                 pending_table_heading = None
             continue
 
@@ -1265,10 +1550,10 @@ def add_body_sections(anchor, blocks):
             continue
 
 
-def add_reference_and_ack(anchor):
-    add_heading(anchor, "参考文献", 1)
-    for item in REFERENCES:
-        add_reference(anchor, item)
+def add_reference_and_ack(anchor, references: list[str]):
+    add_heading(anchor, "参考文献", 1, red=True)
+    for item in references:
+        add_reference(anchor, item, red=True)
 
     add_heading(anchor, "致 谢", 1)
     ack_texts = [
@@ -1293,14 +1578,17 @@ def build_docx() -> None:
     # 先清正文示例页，再清摘要/目录说明页，避免前一轮删除导致索引整体前移。
     clear_range(doc, 139, 216)
     clear_range(doc, 81, 137)
+    clear_following_body_content(anchor_body)
     anchor_abs.text = ""
     anchor_body.text = ""
 
     final_text = extract_final_text()
+    source_reference_map = extract_reference_map_from_source()
+    final_text, ordered_references = renumber_citations(final_text, source_reference_map)
     blocks = parse_markdown_blocks(final_text)
     add_abstract_section(anchor_abs, final_text)
     add_body_sections(anchor_body, blocks)
-    add_reference_and_ack(anchor_body)
+    add_reference_and_ack(anchor_body, ordered_references)
 
     # 清理锚点占位段
     anchor_abs.text = ""
@@ -1309,6 +1597,7 @@ def build_docx() -> None:
         if paragraph.text.strip() in {"#", "##"}:
             remove_paragraph(paragraph)
     remove_tables_before_first_chapter(doc)
+    highlight_citation_numbers(doc)
 
     doc.save(str(OUTPUT_DOCX))
 

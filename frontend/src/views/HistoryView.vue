@@ -124,7 +124,7 @@ const feedback = ref({ type: 'success', message: '' })
 let feedbackTimer = null
 
 const STAGE_LABEL_MAP = {
-  W: '清醒阶段',
+  W: 'W阶段',
   N1: 'N1阶段',
   N2: 'N2阶段',
   N3: 'N3阶段',
@@ -146,7 +146,7 @@ function formatFocusStage(label = '') {
 
 function normalizeMedicalText(text = '') {
   return String(text || '')
-    .replace(/\s+(?=(清醒阶段|N1阶段|N2阶段|N3阶段|REM阶段))/g, '')
+    .replace(/\s+(?=(W阶段|N1阶段|N2阶段|N3阶段|REM阶段))/g, '')
     .replace(/\s{2,}/g, ' ')
     .trim()
 }

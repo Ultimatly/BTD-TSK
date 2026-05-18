@@ -1,361 +1,323 @@
+from __future__ import annotations
+
 import argparse
 import csv
+import random
 from pathlib import Path
 
 import joblib
+import mne
 import numpy as np
 
-from data_processor import build_dataset_bundle, process_record_with_metadata
-from train_btd_tsk_distill import DATASET_CONFIGS, FINAL_SEED
+from data_processor import (
+    ECG_HRV_FEATURE_DIM_OPT,
+    butter_bandpass_filter,
+    extract_ecg_hrv_features_optimized,
+    extract_engineered_eeg_features,
+    wavelet_denoise,
+)
 
-CLASS_LABELS = ['W', 'N1', 'N2', 'N3', 'R']
-CLASS_LABELS_CN = ['清醒(W)', 'N1', 'N2', 'N3', 'REM(R)']
-
-# 仅约束通常不应直接发生的跳变
-IMPOSSIBLE_TRANSITIONS = {
-    (0, 3),  # W -> N3
-    (3, 0),  # N3 -> W
-    (1, 3),  # N1 -> N3
-    (3, 1),  # N3 -> N1
-    (3, 4),  # N3 -> R
-    (4, 3),  # R -> N3
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+MODEL_PATH = PROJECT_ROOT / "models" / "btd_tsk_student.joblib"
+EXTERNAL_ROOT = PROJECT_ROOT / "data" / "haaglanden-medisch-centrum-sleep-staging-database-1.1" / "recordings"
+RESULT_DIR = PROJECT_ROOT / "result"
+CLASS_LABELS = ["W", "N1", "N2", "N3", "REM"]
+# 在这里填写默认预测记录，例如 "SN022.edf"；留空则按随机方式选择。
+DEFAULT_RECORD = "SN003.edf"
+SCORING_MAP = {
+    "W": "W",
+    "WAKE": "W",
+    "0": "W",
+    "N1": "N1",
+    "1": "N1",
+    "N2": "N2",
+    "2": "N2",
+    "N3": "N3",
+    "3": "N3",
+    "4": "N3",
+    "R": "REM",
+    "REM": "REM",
 }
 
 
-def compute_metrics(y_true, y_pred):
-    y_true = np.asarray(y_true, dtype=int)
-    y_pred = np.asarray(y_pred, dtype=int)
-    num_classes = len(CLASS_LABELS)
-    cm = np.zeros((num_classes, num_classes), dtype=int)
-    for true_label, pred_label in zip(y_true, y_pred):
-        cm[true_label, pred_label] += 1
+def normalize_stage(stage_token: str) -> str:
+    text = str(stage_token).strip().upper().replace("SLEEP STAGE", "").strip()
+    return SCORING_MAP.get(text, "")
 
-    total = np.sum(cm)
-    oa = np.trace(cm) / total if total > 0 else 0.0
-    sensitivity = []
-    for class_idx in range(num_classes):
+
+def discover_available_records(data_root: Path) -> list[str]:
+    return [
+        path.name
+        for path in sorted(data_root.glob("SN*.edf"))
+        if not path.name.endswith("_sleepscoring.edf")
+    ]
+
+
+def choose_random_record(data_root: Path, seed: int = 42) -> str:
+    records = discover_available_records(data_root)
+    if not records:
+        raise ValueError(f"No EDF records found in {data_root}")
+    rng = random.Random(seed)
+    return rng.choice(records)
+
+
+def resolve_record_name(record_value: str | None, data_root: Path, seed: int = 42) -> str:
+    """解析待预测记录名；未指定时默认随机选择一条记录。"""
+    if not record_value:
+        if DEFAULT_RECORD:
+            return resolve_record_name(DEFAULT_RECORD, data_root, seed=seed)
+        return choose_random_record(data_root, seed=seed)
+
+    record_text = str(record_value).strip()
+    if not record_text:
+        if DEFAULT_RECORD:
+            return resolve_record_name(DEFAULT_RECORD, data_root, seed=seed)
+        return choose_random_record(data_root, seed=seed)
+
+    record_path = Path(record_text)
+    if record_path.exists():
+        return record_path.name
+
+    candidate_name = record_text if record_text.lower().endswith(".edf") else f"{record_text}.edf"
+    candidate_path = data_root / candidate_name
+    if not candidate_path.exists():
+        raise ValueError(f"指定的记录文件不存在：{candidate_name}")
+    return candidate_name
+
+
+def parse_scoring_file(scoring_path: Path, fs: float) -> list[tuple[int, int]]:
+    epochs: list[tuple[int, int]] = []
+    with scoring_path.open("r", encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f)
+        if reader.fieldnames:
+            reader.fieldnames = [name.strip() for name in reader.fieldnames]
+        for row in reader:
+            row = {str(key).strip(): value for key, value in row.items()}
+            annotation = str(row.get("Annotation", "")).strip()
+            if not annotation.startswith("Sleep stage"):
+                continue
+            stage_token = annotation.replace("Sleep stage", "", 1).strip()
+            normalized = normalize_stage(stage_token)
+            if normalized not in CLASS_LABELS:
+                continue
+            onset_seconds = float(row.get("Recording onset", "0") or 0)
+            duration_seconds = float(row.get("Duration", "0") or 0)
+            if duration_seconds <= 0:
+                continue
+            sample_idx = int(round(onset_seconds * fs))
+            epochs.append((sample_idx, CLASS_LABELS.index(normalized)))
+    return epochs
+
+
+def select_channel_indices(ch_names: list[str], preferred_eeg_channels: list[str], preferred_ecg_keywords: list[str]) -> tuple[int, int]:
+    normalized_names = {str(name).upper(): idx for idx, name in enumerate(ch_names)}
+    eeg_index = -1
+    for preferred in preferred_eeg_channels:
+        idx = normalized_names.get(str(preferred).upper())
+        if idx is not None:
+            eeg_index = idx
+            break
+    if eeg_index == -1:
+        for idx, name in enumerate(ch_names):
+            upper_name = str(name).upper()
+            if "EEG" in upper_name and "C4" in upper_name:
+                eeg_index = idx
+                break
+    if eeg_index == -1:
+        raise ValueError(f"无适配通道：未找到可用的 C4 EEG 通道。可用通道: {ch_names}")
+
+    ecg_index = -1
+    upper_keywords = [keyword.upper() for keyword in preferred_ecg_keywords]
+    for idx, name in enumerate(ch_names):
+        upper_name = str(name).upper()
+        if any(keyword in upper_name for keyword in upper_keywords):
+            ecg_index = idx
+            break
+    if ecg_index == -1:
+        raise ValueError(f"无适配通道：未找到 ECG 通道。可用通道: {ch_names}")
+    return eeg_index, ecg_index
+
+
+def extract_record_features(record_name: str, preferred_eeg_channels: list[str], preferred_ecg_keywords: list[str]) -> tuple[np.ndarray, np.ndarray, list[dict[str, object]]]:
+    record_path = EXTERNAL_ROOT / record_name
+    scoring_path = EXTERNAL_ROOT / record_name.replace(".edf", "_sleepscoring.txt")
+    raw = mne.io.read_raw_edf(str(record_path), preload=False, verbose="ERROR")
+    fs = float(raw.info["sfreq"])
+    eeg_index, ecg_index = select_channel_indices(raw.ch_names, preferred_eeg_channels, preferred_ecg_keywords)
+
+    signals = raw.get_data(picks=[eeg_index, ecg_index])
+    eeg_signal = np.asarray(signals[0], dtype=float)
+    ecg_signal = np.asarray(signals[1], dtype=float)
+    epoch_len = int(round(30 * fs))
+    epochs = parse_scoring_file(scoring_path, fs)
+
+    x_rows: list[np.ndarray] = []
+    y_rows: list[int] = []
+    metadata: list[dict[str, object]] = []
+    for sample_idx, label_id in epochs:
+        if sample_idx < 0 or sample_idx + epoch_len > len(eeg_signal):
+            continue
+        eeg_epoch = eeg_signal[sample_idx:sample_idx + epoch_len]
+        eeg_filtered = butter_bandpass_filter(eeg_epoch, lowcut=0.5, highcut=30.0, fs=fs)
+        eeg_denoised = wavelet_denoise(eeg_filtered, wavelet="db6")
+        eeg_features = extract_engineered_eeg_features(eeg_denoised, fs)
+
+        ecg_epoch = ecg_signal[sample_idx:sample_idx + epoch_len]
+        ecg_features = extract_ecg_hrv_features_optimized(ecg_epoch, fs)
+        if len(ecg_features) != ECG_HRV_FEATURE_DIM_OPT:
+            raise ValueError("Unexpected ECG feature dimension.")
+
+        x_rows.append(np.concatenate([eeg_features, ecg_features], axis=0))
+        y_rows.append(label_id)
+        metadata.append(
+            {
+                "record_name": record_name,
+                "sequence_index": len(metadata),
+                "time_sec": float(sample_idx / fs),
+                "true_label": CLASS_LABELS[label_id],
+            }
+        )
+
+    return np.asarray(x_rows, dtype=float), np.asarray(y_rows, dtype=int), metadata
+
+
+def compute_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict[str, object]:
+    cm = np.zeros((len(CLASS_LABELS), len(CLASS_LABELS)), dtype=int)
+    for true_label, pred_label in zip(y_true, y_pred):
+        cm[int(true_label), int(pred_label)] += 1
+    total = int(np.sum(cm))
+    oa = float(np.trace(cm) / total) if total > 0 else 0.0
+    recalls = []
+    for class_idx in range(len(CLASS_LABELS)):
         tp = cm[class_idx, class_idx]
         fn = np.sum(cm[class_idx, :]) - tp
-        sen = tp / (tp + fn) if (tp + fn) > 0 else 0.0
-        sensitivity.append(sen)
-
-    f1_list = []
-    for class_idx in range(num_classes):
+        recalls.append(float(tp / (tp + fn)) if (tp + fn) > 0 else 0.0)
+    macro_f1 = []
+    for class_idx in range(len(CLASS_LABELS)):
         tp = cm[class_idx, class_idx]
         fp = np.sum(cm[:, class_idx]) - tp
         fn = np.sum(cm[class_idx, :]) - tp
         precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
         recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
-        if precision + recall == 0:
-            f1_list.append(0.0)
-        else:
-            f1_list.append(2 * precision * recall / (precision + recall))
-
+        macro_f1.append(0.0 if precision + recall == 0 else 2 * precision * recall / (precision + recall))
     return {
-        'oa': float(oa),
-        'mean_sensitivity': float(np.mean(sensitivity)),
-        'macro_f1': float(np.mean(f1_list)),
-        'cm': cm,
+        "oa": oa,
+        "mean_sensitivity": float(np.mean(recalls)),
+        "macro_f1": float(np.mean(macro_f1)),
+        "cm": cm,
     }
 
 
-def smooth_probabilities_with_window(probabilities, radius):
-    probabilities = np.asarray(probabilities, dtype=float)
-    if radius <= 0 or len(probabilities) == 0:
-        return probabilities.copy()
+def apply_sleep_jump_smoothing(probabilities: np.ndarray, window_radius: int = 2) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """对逐 epoch 概率做局部平滑，减少不合理的单点跳变。"""
+    probs = np.asarray(probabilities, dtype=float)
+    if probs.ndim != 2 or probs.shape[0] == 0:
+        raise ValueError("概率矩阵为空或维度不正确。")
 
-    smoothed = np.zeros_like(probabilities)
-    for idx in range(len(probabilities)):
-        left = max(0, idx - radius)
-        right = min(len(probabilities), idx + radius + 1)
-        smoothed[idx] = np.mean(probabilities[left:right], axis=0)
+    raw_labels = np.argmax(probs, axis=1).astype(int)
+    if window_radius <= 0 or probs.shape[0] == 1:
+        row_sum = probs.sum(axis=1, keepdims=True)
+        normalized = np.divide(probs, row_sum, out=np.zeros_like(probs), where=row_sum > 0)
+        return raw_labels, raw_labels.copy(), normalized
 
-    row_sum = np.sum(smoothed, axis=1, keepdims=True) + 1e-12
-    return smoothed / row_sum
+    smoothed = np.zeros_like(probs, dtype=float)
+    total = probs.shape[0]
+    for idx in range(total):
+        start = max(0, idx - window_radius)
+        end = min(total, idx + window_radius + 1)
+        local_probs = probs[start:end]
+        local_weights = np.ones(end - start, dtype=float)
+        local_center = idx - start
+        for pos in range(end - start):
+            distance = abs(pos - local_center)
+            local_weights[pos] = 1.0 / (1.0 + distance)
+        weighted_sum = np.sum(local_probs * local_weights[:, None], axis=0)
+        smoothed[idx] = weighted_sum / np.sum(local_weights)
 
+    row_sum = smoothed.sum(axis=1, keepdims=True)
+    normalized = np.divide(smoothed, row_sum, out=np.zeros_like(smoothed), where=row_sum > 0)
+    final_labels = np.argmax(normalized, axis=1).astype(int)
 
-def is_transition_valid(prev_label, next_label):
-    if prev_label is None or next_label is None:
-        return True
-    return (int(prev_label), int(next_label)) not in IMPOSSIBLE_TRANSITIONS
+    # 若单个 epoch 与前后两个同标签片段冲突，则回填为邻域主导类别。
+    if total >= 3:
+        adjusted = final_labels.copy()
+        for idx in range(1, total - 1):
+            prev_label = adjusted[idx - 1]
+            next_label = adjusted[idx + 1]
+            current_label = adjusted[idx]
+            if prev_label == next_label and current_label != prev_label:
+                adjusted[idx] = prev_label
+        final_labels = adjusted
 
-
-def correct_impossible_jumps(raw_labels, smoothed_probabilities, max_passes=3):
-    labels = np.asarray(raw_labels, dtype=int).copy()
-    smoothed_probabilities = np.asarray(smoothed_probabilities, dtype=float)
-    num_classes = smoothed_probabilities.shape[1]
-
-    if len(labels) <= 1:
-        return labels
-
-    for _ in range(max_passes):
-        changed = False
-
-        for idx in range(1, len(labels) - 1):
-            prev_label = labels[idx - 1]
-            curr_label = labels[idx]
-            next_label = labels[idx + 1]
-            if prev_label == next_label and curr_label != prev_label:
-                if (not is_transition_valid(prev_label, curr_label)) or (not is_transition_valid(curr_label, next_label)):
-                    labels[idx] = prev_label
-                    changed = True
-
-        for idx in range(len(labels)):
-            prev_label = labels[idx - 1] if idx > 0 else None
-            curr_label = labels[idx]
-            next_label = labels[idx + 1] if idx < len(labels) - 1 else None
-
-            if is_transition_valid(prev_label, curr_label) and is_transition_valid(curr_label, next_label):
-                continue
-
-            candidate_scores = smoothed_probabilities[idx].copy()
-            valid_mask = np.ones(num_classes, dtype=bool)
-            for class_idx in range(num_classes):
-                if not is_transition_valid(prev_label, class_idx):
-                    valid_mask[class_idx] = False
-                if not is_transition_valid(class_idx, next_label):
-                    valid_mask[class_idx] = False
-
-            if np.any(valid_mask):
-                masked_scores = np.where(valid_mask, candidate_scores, -1.0)
-                best_label = int(np.argmax(masked_scores))
-                if best_label != curr_label:
-                    labels[idx] = best_label
-                    changed = True
-
-        if not changed:
-            break
-
-    return labels
+    return raw_labels, final_labels, normalized
 
 
-def apply_sleep_jump_smoothing(probabilities, window_radius=2):
-    smoothed_probabilities = smooth_probabilities_with_window(probabilities, radius=window_radius)
-    raw_labels = np.argmax(probabilities, axis=1)
-    smooth_labels = correct_impossible_jumps(raw_labels, smoothed_probabilities, max_passes=3)
-    return raw_labels, smooth_labels, smoothed_probabilities
+def write_outputs(record_name: str, metadata: list[dict[str, object]], y_true: np.ndarray, y_pred: np.ndarray, probabilities: np.ndarray) -> tuple[Path, Path]:
+    RESULT_DIR.mkdir(parents=True, exist_ok=True)
+    stem = record_name.replace(".edf", "")
+    csv_path = RESULT_DIR / f"prediction_{stem}.csv"
+    txt_path = RESULT_DIR / f"prediction_{stem}.txt"
 
-
-def build_training_scaler(data_dir, dataset_name):
-    if dataset_name not in DATASET_CONFIGS:
-        raise ValueError(f'未知数据集分组: {dataset_name}')
-    bundle = build_dataset_bundle(
-        data_dir=data_dir,
-        record_names=DATASET_CONFIGS[dataset_name],
-        test_size=0.25,
-        random_state=FINAL_SEED,
-    )
-    return bundle['scaler']
-
-
-def discover_available_records(data_dir):
-    data_path = Path(data_dir)
-    candidates = {}
-    for path in data_path.glob('slp*.hea'):
-        candidates.setdefault(path.stem, set()).add('.hea')
-    for path in data_path.glob('slp*.st'):
-        candidates.setdefault(path.stem, set()).add('.st')
-
-    available_records = []
-    for record_name, suffixes in candidates.items():
-        if '.hea' in suffixes and '.st' in suffixes:
-            available_records.append(record_name)
-    return sorted(set(available_records))
-
-
-def select_prediction_records(data_dir, dataset_name, manual_records=None):
-    if manual_records:
-        return list(manual_records)
-
-    training_records = set(DATASET_CONFIGS[dataset_name])
-    available_records = discover_available_records(data_dir)
-    external_records = [name for name in available_records if name not in training_records]
-    if external_records:
-        return external_records
-    return list(DATASET_CONFIGS[dataset_name])
-
-
-def predict_one_record(model, scaler, data_dir, record_name, window_radius):
-    X_raw, y_true, metadata = process_record_with_metadata(data_dir, record_name)
-    if len(X_raw) == 0:
-        raise ValueError(f'记录 {record_name} 未提取到有效样本。')
-
-    X_scaled = scaler.transform(X_raw)
-    raw_probabilities = model.predict_proba(X_scaled)
-    raw_labels, smooth_labels, smoothed_probabilities = apply_sleep_jump_smoothing(
-        raw_probabilities,
-        window_radius=window_radius,
-    )
-
-    rows = []
-    for idx, item in enumerate(metadata):
-        raw_label = int(raw_labels[idx])
-        smooth_label = int(smooth_labels[idx])
-        true_label = int(y_true[idx]) if y_true is not None else -1
-        rows.append(
-            {
-                'record_name': item['record_name'],
-                'epoch_index': int(item['sequence_index']),
-                'raw_label_id': raw_label,
-                'raw_label': CLASS_LABELS[raw_label],
-                'raw_label_cn': CLASS_LABELS_CN[raw_label],
-                'raw_confidence': float(raw_probabilities[idx, raw_label]),
-                'smoothed_label_id': smooth_label,
-                'smoothed_label': CLASS_LABELS[smooth_label],
-                'smoothed_label_cn': CLASS_LABELS_CN[smooth_label],
-                'smoothed_confidence': float(smoothed_probabilities[idx, smooth_label]),
-                'true_label_id': true_label,
-                'true_label': '' if true_label < 0 else CLASS_LABELS[true_label],
-                'true_label_cn': '' if true_label < 0 else CLASS_LABELS_CN[true_label],
-            }
-        )
-
-    raw_metrics = None if y_true is None else compute_metrics(y_true, raw_labels)
-    smooth_metrics = None if y_true is None else compute_metrics(y_true, smooth_labels)
-    return rows, raw_metrics, smooth_metrics
-
-
-def write_prediction_csv(rows, save_path):
-    fieldnames = [
-        'record_name',
-        'epoch_index',
-        'raw_label_id',
-        'raw_label',
-        'raw_label_cn',
-        'raw_confidence',
-        'smoothed_label_id',
-        'smoothed_label',
-        'smoothed_label_cn',
-        'smoothed_confidence',
-        'true_label_id',
-        'true_label',
-        'true_label_cn',
-    ]
-    with save_path.open('w', newline='', encoding='utf-8-sig') as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+    with csv_path.open("w", newline="", encoding="utf-8-sig") as f:
+        fieldnames = ["record_name", "sequence_index", "time_sec", "true_label", "pred_label", "confidence"]
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerows(rows)
+        for item, pred_id, prob in zip(metadata, y_pred, probabilities):
+            writer.writerow(
+                {
+                    "record_name": item["record_name"],
+                    "sequence_index": item["sequence_index"],
+                    "time_sec": f"{float(item['time_sec']):.2f}",
+                    "true_label": item["true_label"],
+                    "pred_label": CLASS_LABELS[int(pred_id)],
+                    "confidence": f"{float(np.max(prob)):.6f}",
+                }
+            )
 
-
-def build_summary_text(dataset_name, model_path, record_names, raw_metrics_by_record, smooth_metrics_by_record):
+    metrics = compute_metrics(y_true, y_pred)
+    counts_true = np.bincount(y_true, minlength=len(CLASS_LABELS))
+    counts_pred = np.bincount(y_pred, minlength=len(CLASS_LABELS))
     lines = []
-    lines.append('=== BTD-TSK 已训练学生模型预测结果 ===\n\n')
-    lines.append(f'数据分组: {dataset_name}\n')
-    lines.append(f'学生模型: {model_path}\n')
-    lines.append(f'预测记录: {", ".join(record_names)}\n\n')
-
-    def fmt(metrics):
-        return (
-            f'OA={metrics["oa"] * 100:.2f}% | '
-            f'MeanSen={metrics["mean_sensitivity"] * 100:.2f}% | '
-            f'MacroF1={metrics["macro_f1"] * 100:.2f}%'
-        )
-
-    all_true = []
-    all_raw = []
-    all_smooth = []
-
-    for record_name in record_names:
-        raw_metrics = raw_metrics_by_record[record_name]['metrics']
-        smooth_metrics = smooth_metrics_by_record[record_name]['metrics']
-        if raw_metrics is None or smooth_metrics is None:
-            lines.append(f'记录 {record_name}\n')
-            lines.append('  当前记录缺少真实标签，仅输出逐 epoch 预测结果。\n\n')
-            continue
-        all_true.extend(raw_metrics_by_record[record_name]['true'])
-        all_raw.extend(raw_metrics_by_record[record_name]['pred'])
-        all_smooth.extend(smooth_metrics_by_record[record_name]['pred'])
-        lines.append(f'记录 {record_name}\n')
-        lines.append(f'  原始预测: {fmt(raw_metrics)}\n')
-        lines.append(f'  平滑预测: {fmt(smooth_metrics)}\n')
-        lines.append(
-            '  平滑增益: '
-            f'OA {(smooth_metrics["oa"] - raw_metrics["oa"]) * 100:+.2f}% | '
-            f'MeanSen {(smooth_metrics["mean_sensitivity"] - raw_metrics["mean_sensitivity"]) * 100:+.2f}% | '
-            f'MacroF1 {(smooth_metrics["macro_f1"] - raw_metrics["macro_f1"]) * 100:+.2f}%\n\n'
-        )
-
-    if all_true:
-        overall_raw = compute_metrics(all_true, all_raw)
-        overall_smooth = compute_metrics(all_true, all_smooth)
-        lines.append('整体结果\n')
-        lines.append(f'  原始预测: {fmt(overall_raw)}\n')
-        lines.append(f'  平滑预测: {fmt(overall_smooth)}\n')
-        lines.append(
-            '  平滑增益: '
-            f'OA {(overall_smooth["oa"] - overall_raw["oa"]) * 100:+.2f}% | '
-            f'MeanSen {(overall_smooth["mean_sensitivity"] - overall_raw["mean_sensitivity"]) * 100:+.2f}% | '
-            f'MacroF1 {(overall_smooth["macro_f1"] - overall_raw["macro_f1"]) * 100:+.2f}%\n'
-        )
-    return ''.join(lines)
-
-
-def parse_args():
-    parser = argparse.ArgumentParser(description='使用已训练的 BTD-TSK 学生模型进行预测。')
-    parser.add_argument('--dataset', default='Data-A', choices=sorted(DATASET_CONFIGS.keys()), help='选择训练模型对应的数据分组。')
-    parser.add_argument('--records', nargs='*', default=None, help='要预测的记录名；不填则优先预测不属于该模型训练分组的记录。')
-    parser.add_argument('--model-path', default=None, help='已训练学生模型路径；不填则使用 models 目录下默认命名。')
-    parser.add_argument('--data-dir', default=None, help='数据目录；默认使用项目下 data 目录。')
-    parser.add_argument('--output-dir', default=None, help='预测结果输出目录；默认使用项目下 result 目录。')
-    parser.add_argument('--window-radius', type=int, default=2, help='滑动窗口半径，默认 2。')
-    return parser.parse_args()
-
-
-def main():
-    args = parse_args()
-    project_root = Path(__file__).resolve().parents[1]
-    data_dir = Path(args.data_dir) if args.data_dir else project_root / 'data'
-    output_dir = Path(args.output_dir) if args.output_dir else project_root / 'result'
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    model_path = Path(args.model_path) if args.model_path else project_root / 'models' / f'btd_tsk_student_{args.dataset}.joblib'
-    if not model_path.exists():
-        raise FileNotFoundError(f'未找到学生模型文件: {model_path}')
-
-    record_names = select_prediction_records(str(data_dir), args.dataset, manual_records=args.records)
-    scaler = build_training_scaler(str(data_dir), args.dataset)
-    model = joblib.load(model_path)
-
-    all_rows = []
-    raw_metrics_by_record = {}
-    smooth_metrics_by_record = {}
-
-    for record_name in record_names:
-        rows, raw_metrics, smooth_metrics = predict_one_record(
-            model=model,
-            scaler=scaler,
-            data_dir=str(data_dir),
-            record_name=record_name,
-            window_radius=args.window_radius,
-        )
-        all_rows.extend(rows)
-        raw_metrics_by_record[record_name] = {
-            'metrics': raw_metrics,
-            'true': [row['true_label_id'] for row in rows if row['true_label_id'] >= 0],
-            'pred': [row['raw_label_id'] for row in rows if row['true_label_id'] >= 0],
-        }
-        smooth_metrics_by_record[record_name] = {
-            'metrics': smooth_metrics,
-            'pred': [row['smoothed_label_id'] for row in rows if row['true_label_id'] >= 0],
-        }
-
-    scope_name = record_names[0] if len(record_names) == 1 else f'{args.dataset}_all'
-    csv_path = output_dir / f'btd_tsk_prediction_{scope_name}.csv'
-    summary_path = output_dir / f'btd_tsk_prediction_{scope_name}_summary.txt'
-    write_prediction_csv(all_rows, csv_path)
-    summary_text = build_summary_text(
-        dataset_name=args.dataset,
-        model_path=model_path,
-        record_names=record_names,
-        raw_metrics_by_record=raw_metrics_by_record,
-        smooth_metrics_by_record=smooth_metrics_by_record,
+    lines.append("=== 外部记录预测结果 ===\n\n")
+    lines.append(f"记录文件: {record_name}\n")
+    lines.append(
+        f"评估指标: OA={metrics['oa'] * 100:.2f}% | MeanSen={metrics['mean_sensitivity'] * 100:.2f}% | MacroF1={metrics['macro_f1'] * 100:.2f}%\n\n"
     )
-    summary_path.write_text(summary_text, encoding='utf-8-sig')
+    lines.append("真实标签分布:\n")
+    for label, count in zip(CLASS_LABELS, counts_true):
+        lines.append(f"  {label}: {int(count)}\n")
+    lines.append("\n预测标签分布:\n")
+    for label, count in zip(CLASS_LABELS, counts_pred):
+        lines.append(f"  {label}: {int(count)}\n")
+    txt_path.write_text("".join(lines), encoding="utf-8-sig")
+    return csv_path, txt_path
 
-    print(summary_text)
-    print(f'逐 epoch 预测结果已保存到: {csv_path}')
-    print(f'预测汇总已保存到: {summary_path}')
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="使用论文主线 BTD-TSK 模型预测外部 C4+ECG 睡眠记录。")
+    parser.add_argument("--model", type=Path, default=MODEL_PATH, help="Path to the trained BTD-TSK student model.")
+    parser.add_argument("--record", type=str, default="", help="指定记录文件名或完整路径，例如 SN001.edf；留空时默认随机选择。")
+    parser.add_argument("--file", type=str, default="", help="与 --record 等价，用于显式指定待预测的 EDF 文件。")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed used when selecting a random record.")
+    args = parser.parse_args()
+
+    model = joblib.load(args.model)
+    preferred_eeg_channels = list(getattr(model, "preferred_eeg_channels", ["EEG C4-M1", "C4-M1"]))
+    preferred_ecg_keywords = list(getattr(model, "preferred_ecg_keywords", ["ECG", "EKG"]))
+    scaler = getattr(model, "feature_scaler", None)
+    if scaler is None:
+        raise ValueError("Loaded model does not contain a feature scaler.")
+
+    record_name = resolve_record_name(args.file or args.record, EXTERNAL_ROOT, seed=args.seed)
+    x_raw, y_true, metadata = extract_record_features(record_name, preferred_eeg_channels, preferred_ecg_keywords)
+    x_scaled = scaler.transform(x_raw)
+    probabilities = model.predict_proba(x_scaled)
+    predictions = np.argmax(probabilities, axis=1)
+    csv_path, txt_path = write_outputs(record_name, metadata, y_true, predictions, probabilities)
+    print(f"已选择记录：{record_name}")
+    print(csv_path)
+    print(txt_path)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

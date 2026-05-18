@@ -270,7 +270,7 @@ P_\alpha^{rel} = \frac{\sum_{f\in[8,13)} \text{PSD}(f)}
 {\sum_{f} \text{PSD}(f)}
 $$
 
-含义：常与清醒闭眼状态相关。
+含义：常与W闭眼状态相关。
 
 #### 4. EEG 相对 $\beta$ 波功率
 
@@ -287,7 +287,7 @@ $$
 R_{\theta/\alpha} = \frac{P_\theta^{rel}}{P_\alpha^{rel} + \varepsilon}
 $$
 
-含义：刻画浅睡与清醒之间的相对变化关系。
+含义：刻画浅睡与W之间的相对变化关系。
 
 #### 6. EEG 谱边缘频率 SEF95
 

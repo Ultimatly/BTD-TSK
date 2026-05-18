@@ -76,6 +76,74 @@ def _find_signal_index(sig_names, keywords):
     return -1
 
 
+DEFAULT_EEG_CHANNEL_PREFERENCES = (
+    'EEG (C4-A1)',
+    'C4-A1',
+    'EEG C4-A1',
+    'EEG C4-M1',
+    'C4-M1',
+    'PSG_C4',
+    'C4',
+    'EEG (C3-O1)',
+    'C3-O1',
+    'EEG C3-O1',
+    'EEG C3-M2',
+    'C3-M2',
+    'EEG (O2-A1)',
+    'O2-A1',
+    'EEG O2-A1',
+    'EEG O2-M1',
+    'O2-M1',
+    'EEG F4-M1',
+    'F4-M1',
+)
+
+
+def _normalize_channel_name(channel_name):
+    if channel_name is None:
+        return ''
+    text = str(channel_name).upper()
+    for token in (' ', '\t', '-', '_', '(', ')'):
+        text = text.replace(token, '')
+    return text
+
+
+def select_preferred_eeg_index(sig_names, preferred_names=None):
+    preferred_names = tuple(preferred_names or DEFAULT_EEG_CHANNEL_PREFERENCES)
+    normalized_preferences = [_normalize_channel_name(name) for name in preferred_names]
+
+    eeg_candidates = []
+    for idx, sig_name in enumerate(sig_names):
+        sig_upper = str(sig_name).upper()
+        if 'EEG' not in sig_upper:
+            continue
+        eeg_candidates.append((idx, sig_name, _normalize_channel_name(sig_name)))
+
+    if not eeg_candidates:
+        return -1
+
+    # First, require exact normalized match with the preferred MIT-like channel list.
+    for preferred in normalized_preferences:
+        for idx, _, normalized in eeg_candidates:
+            if preferred and preferred == normalized:
+                return idx
+
+    # If exact names are unavailable, fall back only to another C4-like EEG lead.
+    prefers_c4 = any('C4' in preferred for preferred in normalized_preferences)
+    if prefers_c4:
+        for idx, _, normalized in eeg_candidates:
+            if 'C4' in normalized:
+                return idx
+        return -1
+
+    for preferred in normalized_preferences:
+        for idx, _, normalized in eeg_candidates:
+            if preferred and preferred in normalized:
+                return idx
+
+    return eeg_candidates[0][0]
+
+
 def get_label_mapping():
     return {'W': 0, '1': 1, '2': 2, '3': 3, '4': 3, 'R': 4}
 
@@ -292,7 +360,7 @@ def process_record(data_dir, record_name):
     record = wfdb.rdrecord(record_path)
     ann = wfdb.rdann(record_path, 'st')
 
-    eeg_idx = _find_signal_index(record.sig_name, ['EEG'])
+    eeg_idx = select_preferred_eeg_index(record.sig_name)
     if eeg_idx == -1:
         raise ValueError(f'记录 {record_name} 中未找到 EEG 信号')
 

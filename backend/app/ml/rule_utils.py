@@ -16,7 +16,7 @@ if str(SRC_ROOT) not in sys.path:
 
 CLASS_LABELS = ['W', 'N1', 'N2', 'N3', 'R']
 CLASS_LABELS_CN = {
-    'W': '清醒',
+    'W': 'W',
     'N1': 'N1',
     'N2': 'N2',
     'N3': 'N3',
